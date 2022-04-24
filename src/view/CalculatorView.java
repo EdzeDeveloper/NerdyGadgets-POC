@@ -1,8 +1,7 @@
 package view;
 
 import java.awt.event.ActionListener;
-
-import javax.swing.*;
+import java.swing.*;
 
 public class CalculatorView extends JFrame{
 
