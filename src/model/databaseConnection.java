@@ -18,7 +18,7 @@ public class databaseConnection {
 			statement = myConnection.createStatement();
 			
 			// 3. Voorbeeld uitvoeren van een query
-			result = statement.executeQuery("select * from bestelling");
+			result = statement.executeQuery("select * from product");
 			
 			// 4. Voorbeeld uitwerken van een resultaat
 			while (result.next()) {
