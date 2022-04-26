@@ -12,7 +12,7 @@ public class databaseConnection {
 		
 		try {
 			// 1. Connectie met de database maken
-			myConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/nerdygadgets", "root" , "");
+			myConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/nerdygadgets", "root" , "root");
 			
 			// 2. Voorbeeld van het maken van een statement
 			statement = myConnection.createStatement();
