@@ -17,12 +17,14 @@ public class databaseConnection {
 			// 2. Voorbeeld van het maken van een statement
 			statement = myConnection.createStatement();
 			
-			// 3. Voorbeeld uitvoeren van een query
-			result = statement.executeQuery("select * from bestelling");
+			// 3. Voorbeeld uitvoeren van een query (10 random people with corresponding address)
+			result = statement.executeQuery("select * from persoon p JOIN adres a ON p.adresID = a.adresID ORDER BY RAND() LIMIT 10");
 			
 			// 4. Voorbeeld uitwerken van een resultaat
 			while (result.next()) {
-				System.out.println(result.getString("naam") + ", " + result.getString("naam"));
+				System.out.println(result.getString("voornaam") + " " + result.getString("achternaam"));
+				System.out.println(result.getString("straatnaam") + " " + result.getString("huisnummer") + ", " + result.getString("postcode") + " " + result.getString("woonplaats"));
+				System.out.println("");
 			}
 		}
 		// afhandelen van een exeption wanneer het de connectie/query het niet doet.
