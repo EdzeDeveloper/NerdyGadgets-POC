@@ -4,6 +4,7 @@ import model.Order;
 import model.databaseConnection;
 
 import java.sql.*;
+import java.util.ArrayList;
 
 public class OrderRepository {
     databaseConnection database;
@@ -14,12 +15,13 @@ public class OrderRepository {
 
     public boolean create(int bestellingID, int persoonID, int adresID, String status, Date bestelDatum, Date leverDatum) {
             // do some create queries and return succes or failure.
-            return true;
+
+            return true; //that was easy...
     }
     
-    public Order findById(int id) throws SQLException {
+    public Order findById(int id, boolean withOrderedProducts) throws SQLException {
 
-        Order order = this.database.findOrderByIdQuery("select * from bestelling where bestellingID = " + id + " limit 1");
+        Order order = this.database.findOrderByIdQuery(id, withOrderedProducts);
 
         return order;
     }

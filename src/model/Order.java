@@ -1,6 +1,7 @@
 package model;
 
 import java.sql.Date;
+import java.util.ArrayList;
 
 public class Order {
 	private int bestellingID, persoonID, adresID;
@@ -10,7 +11,10 @@ public class Order {
 	private Date bestelDatum;
 	private Date leverDatum;
 
+	private ArrayList besteldeProducten;
+
 	public Order() {
+		this.besteldeProducten = new ArrayList(); // initiate with empty list.
 	}
 
 	public Order(int bestellingID, int persoonID, int adresID, String status, Date bestelDatum, Date leverDatum) {
@@ -54,5 +58,13 @@ public class Order {
 
 	public Date getLeverDatum() { 
 		return leverDatum; 
+	}
+
+	public ArrayList getBesteldeProducten() {
+		return besteldeProducten;
+	}
+
+	public void setBesteldeProducten(ArrayList besteldeProducten) {
+		this.besteldeProducten = besteldeProducten;
 	}
 }
