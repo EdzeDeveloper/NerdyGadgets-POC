@@ -1,6 +1,6 @@
 package model;
 
-public class ReturnModel {
+public class Return {
 	private int bestellingID, retourID;
 	
 	private String reden;

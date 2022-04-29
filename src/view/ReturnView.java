@@ -8,7 +8,6 @@ import javax.swing.*;
 import model.Order;
 import model.Product;
 
-
 public class ReturnView extends JFrame{
 
 	private Order order = new Order();

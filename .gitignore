@@ -24,3 +24,7 @@ hs_err_pid*
 # These files are generated and they cause weird compiler issues. (editor specific I guess?)
 .classpath
 .settings/
+
+# intelliJ project settings.
+.idea/
+NerdyGadgets-POC.iml
