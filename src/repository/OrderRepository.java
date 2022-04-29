@@ -4,7 +4,6 @@ import model.Order;
 import model.databaseConnection;
 
 import java.sql.*;
-import java.util.ArrayList;
 
 public class OrderRepository {
     databaseConnection database;

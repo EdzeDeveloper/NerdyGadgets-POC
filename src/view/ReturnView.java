@@ -1,6 +1,7 @@
 package view;
 
 import java.awt.event.ActionListener;
+import java.util.ArrayList;
 
 import javax.swing.*;
 
@@ -15,7 +16,11 @@ public class ReturnView extends JFrame{
 	private JLabel textLabel = new JLabel("Ordernummer:");
 	private JTextField orderNumber  = new JTextField(10);
 	private JButton searchButton = new JButton("Zoek bestelde producten");
-	private JList list = new JList(order.getBesteldeProducten().toArray());
+
+	private JLabel listLabel  = new JLabel("Kies uw producten die geretourneerd moeten worden:");
+	private JList list = new JList<Product>();
+
+	private JButton searchButton = new JButton("Zoek bestelde producten");
 
 	
 	public ReturnView(){
@@ -30,6 +35,9 @@ public class ReturnView extends JFrame{
 		ReturnPanel.add(textLabel);
 		ReturnPanel.add(orderNumber);
 		ReturnPanel.add(searchButton);
+		
+		ReturnPanel.add(listLabel);
+		listLabel.setVisible(false);
 		ReturnPanel.add(list);
 		
 		this.add(ReturnPanel);
@@ -46,8 +54,16 @@ public class ReturnView extends JFrame{
 
 	public void setOrder(Order order) {
 		this.order = order;
-		System.out.println(((Product) order.getBesteldeProducten().get(0)).getProductNaam());
-		//@TO-DO: Add products to list so customer can choose between products to return.
+
+		//Map order products to a workable set/ array for our list. {"pName1", pName2, etc..}
+		ArrayList<String> products = new ArrayList<String>();
+		for (Product p : order.getBesteldeProducten()) {
+			products.add(p.getProductNaam());
+		}
+
+		listLabel.setVisible(true);
+		this.list.setListData(products.toArray());
+		repaint();
 	}
 
 	

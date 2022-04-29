@@ -3,8 +3,6 @@ package model;
 import java.sql.*;
 import java.util.ArrayList;
 
-import model.Product;
-
 public class databaseConnection {
 
 	Connection myConnection = null;
@@ -76,7 +74,7 @@ public class databaseConnection {
             }
 
 			if(withOrderedProducts) {
-				ArrayList besteldeProducten = new ArrayList();
+				ArrayList<Product> besteldeProducten = new ArrayList<Product>();
 
 				result = statement.executeQuery("select * from product p join besteldeproducten bp on p.productID = bp.productID join bestelling b on b.bestellingID = bp.bestellingID where b.bestellingID = " + id);
 				

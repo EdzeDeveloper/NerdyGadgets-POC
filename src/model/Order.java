@@ -11,10 +11,10 @@ public class Order {
 	private Date bestelDatum;
 	private Date leverDatum;
 
-	private ArrayList besteldeProducten;
+	private ArrayList<Product> besteldeProducten;
 
 	public Order() {
-		this.besteldeProducten = new ArrayList(); // initiate with empty list.
+		this.besteldeProducten = new ArrayList<Product>(); // initiate with empty list.
 	}
 
 	public Order(int bestellingID, int persoonID, int adresID, String status, Date bestelDatum, Date leverDatum) {
@@ -60,11 +60,11 @@ public class Order {
 		return leverDatum; 
 	}
 
-	public ArrayList getBesteldeProducten() {
+	public ArrayList<Product> getBesteldeProducten() {
 		return besteldeProducten;
 	}
 
-	public void setBesteldeProducten(ArrayList besteldeProducten) {
+	public void setBesteldeProducten(ArrayList<Product> besteldeProducten) {
 		this.besteldeProducten = besteldeProducten;
 	}
 }

@@ -34,7 +34,7 @@ public class ReturnController {
         		// probeer van de view het ordernummer te lezen.
 				orderNumber = returnView.getOrderNumber();
 				
-        		// wanneer je hewt ordernummer hebt, haal de order op uit de database.
+        		// wanneer je het ordernummer hebt, haal de order op uit de database.
 				Order order = orderRepository.findById(orderNumber, true);
 				
         		//haal het resultaat op door de getCalculationValue functie.
