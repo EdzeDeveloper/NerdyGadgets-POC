@@ -20,7 +20,7 @@ public class ReturnView extends JFrame{
 	private JLabel listLabel  = new JLabel("Kies uw producten die geretourneerd moeten worden:");
 	private JList list = new JList<Product>();
 
-	private JButton searchButton = new JButton("Zoek bestelde producten");
+	private JButton nextButton = new JButton("Volgende");
 
 	
 	public ReturnView(){
@@ -39,6 +39,9 @@ public class ReturnView extends JFrame{
 		ReturnPanel.add(listLabel);
 		listLabel.setVisible(false);
 		ReturnPanel.add(list);
+
+		ReturnPanel.add(nextButton);
+		nextButton.setVisible(false);
 		
 		this.add(ReturnPanel);
 		
@@ -63,6 +66,8 @@ public class ReturnView extends JFrame{
 
 		listLabel.setVisible(true);
 		this.list.setListData(products.toArray());
+		nextButton.setVisible(true);
+
 		repaint();
 	}
 
