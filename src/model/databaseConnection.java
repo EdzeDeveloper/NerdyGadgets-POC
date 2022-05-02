@@ -10,7 +10,7 @@ public class databaseConnection {
 	public databaseConnection() throws SQLException {
 		
 		try {
-			this.myConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/nerdygadgets", "root" , "root");
+			this.myConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/nerdygadgets", "root" , "");
 		}
 		catch (Exception exception) {
 			exception.printStackTrace();
@@ -19,7 +19,7 @@ public class databaseConnection {
 
 	public Order findOrderByIdQuery(int id) throws SQLException {
 
-        Order order = new Order();
+		Order order = new Order();
 
 		Statement statement = null;
 		ResultSet result = null;
