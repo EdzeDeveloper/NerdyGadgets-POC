@@ -13,9 +13,10 @@ public class RouteRepository {
         deliveryList = new int[numberOfNodes];
     }
 
-    public int[] nearestNeighbor() {
+    public Route nearestNeighbor() {
         int[] nodeList = graphModel.getNodeList();
         edgeModel[] edgeList = graphModel.getEdgeList();
+        int aantalkm = 0;
 
         // Add the first node to the list
         deliveryList[0] = nodeList[0];
@@ -74,14 +75,36 @@ public class RouteRepository {
                     break;
                 }
             }
+            aantalkm += lowestCostEdgeCost;
             deliveryList[delivery+1] = nextNode;
         }
 
         Route.setDeliveryOrder(deliveryList);
-        return Route.getDeliveryOrder();
+        Route.setAantalkm(aantalkm);
+        return Route;
     }
 
-    public void twoOpt() {
+    public Route twoOpt() {
+        int[] nodeList = graphModel.getNodeList();
+        edgeModel[] edgeList = graphModel.getEdgeList();
 
+        // Perform 2-changes for every edge
+        for (int delivery = 0; delivery < deliveryList.length - 1; delivery++) {
+            int startNodeID = deliveryList[delivery];
+            int targetNodeID = deliveryList[delivery+1];
+
+            // get the current edge
+            int currentEdgeID = 0;
+            int currentEdgeCost = 0;
+
+            // loop through all nodes and perform a 2-change if possible
+            for (int node:nodeList) {
+
+            }
+        }
+
+
+
+        return Route;
     }
 }

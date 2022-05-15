@@ -18,10 +18,13 @@ public class main {
 //
 //    databaseConnection dbconnect = new databaseConnection();
 //
-//      theView.setVisible(true);
+//    theView.setVisible(true);
 
-    RouteRepository routeRepository = new RouteRepository(10);
-    routeRepository.nearestNeighbor();
+    RouteRepository routeRepository = new RouteRepository(100);
+    Route route = routeRepository.nearestNeighbor();
+    System.out.println(route.getAantalkm());
+
+    routeRepository.twoOpt();
 
   }
 }
