@@ -2,6 +2,9 @@ package repository;
 
 import model.*;
 
+import java.util.Arrays;
+import java.util.Collections;
+
 public class RouteRepository {
     private Route Route;
     private graphModel graphModel;
@@ -99,7 +102,6 @@ public class RouteRepository {
 
             // save the current best edge cost
             double bestCost = -1;
-            int bestTargetNode1 = targetNodeID1;
             int bestStartNode2 = -1;
             int bestTargetNode2 = -1;
 
@@ -108,7 +110,7 @@ public class RouteRepository {
                 int startNodeID2 = deliveryList[node];
                 int targetNodeID2 = deliveryList[node+1];
 
-                // check if a 2-change is possible
+                // check if there is a possible 2-change
                 if (startNodeID1 == startNodeID2 || startNodeID1 == targetNodeID2 || targetNodeID1 == startNodeID2 || targetNodeID1 == targetNodeID2) {
                     continue;
                 }
@@ -121,7 +123,6 @@ public class RouteRepository {
                 double currentCost = currentEdgeCost1 + currentEdgeCost2;
                 if (bestCost == -1) {
                     bestCost = currentCost;
-                    bestTargetNode2 = targetNodeID2;
                 }
 
                 // perform a 2-change
@@ -139,24 +140,38 @@ public class RouteRepository {
                 // compare the old situation to the new situation, if its better switch the targets
                 if (targetCost < bestCost){
                     bestCost = targetCost;
-                    bestTargetNode1 = targetNodeID2;
                     bestStartNode2 = startNodeID2;
-                    bestTargetNode2 = targetNodeID1;
+                    bestTargetNode2 = targetNodeID2;
                 }
             }
 
             // check if there is a better 2-change, if not go to next delivery
-            if (targetNodeID1 == bestTargetNode1){
+            if (targetNodeID1 == -1){
                 continue;
             }
 
             // if there is a better 2-change, edit the route
-            System.arraycopy(deliveryList, );
+            int firstNodeIndex = -1;
+            int secondNodeIndex = -1;
             for (int deliveryNumber = 0; deliveryNumber < deliveryList.length - 1; deliveryNumber++) {
-                int currentDeliveryNumber = deliveryList[deliveryNumber];
-                if (currentDeliveryNumber == startNodeID1 || currentDeliveryNumber == bestStartNode2){
+                if (deliveryList[deliveryNumber] == targetNodeID1 || deliveryList[deliveryNumber] == bestStartNode2){
+                    if (firstNodeIndex == -1) {
+                        firstNodeIndex = deliveryNumber;
+                    } else {
+                        secondNodeIndex = deliveryNumber;
+                        break;
+                    }
                 }
             }
+
+            // grab the part to be reversed and reverse it
+            int lengthToReverse = secondNodeIndex - firstNodeIndex;
+            int[] partToReverse = new int[lengthToReverse];
+            System.arraycopy(deliveryList, firstNodeIndex, partToReverse, 0, lengthToReverse);
+            Collections.reverse(Arrays.asList(partToReverse));
+
+            // insert the reversed part back into the deliveryList
+            System.arraycopy(partToReverse, 0, deliveryList, firstNodeIndex, lengthToReverse);
         }
 
 
