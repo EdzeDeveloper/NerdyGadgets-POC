@@ -11,7 +11,7 @@ public class main {
       
     ReturnOrderListController controller = new ReturnOrderListController(returnOrderListView);
 
-    ResultSet getAllPersonData = newDatabaseConnection.read("Select * from Persoon limit 10");
+    ResultSet getAllPersonData = newDatabaseConnection.select("Select * from Persoon limit 10");
     while(getAllPersonData.next()){
       System.out.println(getAllPersonData.getString("voornaam"));
     }
