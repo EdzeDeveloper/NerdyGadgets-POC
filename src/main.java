@@ -15,7 +15,8 @@ public class main {
     while(getAllPersonData.next()){
       System.out.println(getAllPersonData.getString("voornaam"));
     }
-    System.out.println(getAllPersonData);
-
+    // newDatabaseConnection.insertUpdateDelete("INSERT INTO persoon (persoonID, voornaam, achternaam, adresID, email) VALUES ('69420', 'edze', 'van der werff', '3889', 's1177499@student.windesheim.nl')");
+    // newDatabaseConnection.insertUpdateDelete("DELETE FROM persoon WHERE persoonID = '69420'");
+    // newDatabaseConnection.insertUpdateDelete("UPDATE persoon SET voornaam = 'hotty42069' WHERE persoonID = '69420'");
   }
 }
