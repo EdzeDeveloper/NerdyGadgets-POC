@@ -35,6 +35,7 @@ public class newDatabaseConnection {
 			return createConnection().createStatement().executeQuery(query); 
 		} finally {
 			System.out.println("vgm is die nu closed2222");
+      dbConnection.close();
 		}
 	}
 	
