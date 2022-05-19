@@ -24,7 +24,15 @@ public class newDatabaseConnection {
         } else if (excecuteUpdate == 0) {
           System.out.println("item deleted");
         } 
-      } 
+      } catch(SQLDataException e) {
+        System.err.println("SQLState: " +
+        ((SQLException)e).getSQLState());
+
+         System.err.println("Error Code: " +
+        ((SQLException)e).getErrorCode());
+      } finally {
+        dbConnection.close();
+      }
 	}
 
 	public static ResultSet read(String query) throws SQLException {
@@ -33,9 +41,16 @@ public class newDatabaseConnection {
 		try (dbConnection) {
 			// als er connectie gemaakt kan worden deze
 			return createConnection().createStatement().executeQuery(query); 
-		} finally {
+		} catch (SQLDataException e) {
+      System.err.println("SQLState: " +
+      ((SQLException)e).getSQLState());
+
+       System.err.println("Error Code: " +
+      ((SQLException)e).getErrorCode());
+    } finally {
       dbConnection.close();
 		}
+    return null;
 	}
 }
 
