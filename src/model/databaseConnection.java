@@ -145,21 +145,6 @@ public class databaseConnection {
 		}
 		return returnedOrders;
 	}
-
-	public Boolean create(String updateQuery) throws SQLException {
-		int i = this.dbConnection.createStatement().executeUpdate(updateQuery);
-		if (i > 0) {
-				System.out.println("nieuwe item toegevoegd.");
-				return true;
-		} 
-		System.out.println("Fout gegaan met toevoegen van item.");
-		return false;
-	}
-
-	public ResultSet read(String query) throws SQLException {
-		return this.dbConnection.createStatement().executeQuery(query);
-	}
-	
 	// public update(String query) {
 
 	// }
