@@ -9,7 +9,8 @@ public class graphModel {
     private edgeModel[] edgeList;
 
 
-    public graphModel(int numberOfNodes) {
+    public graphModel(int graphID, int numberOfNodes) {
+        this.graphID = graphID;
         this.nodeList = new int[numberOfNodes];
 
         // calculate number of edges (summation/sigma)
@@ -31,11 +32,6 @@ public class graphModel {
 
     public void createGraph() throws SQLException {
 
-        // Get random adresses
-        ResultSet result = newDatabaseConnection.read("SELECT * FROM adres ORDER BY RAND() LIMIT " + this.nodeList.length);
-
-
-        // 3. Calculate cost of every edge
         int startNodeID, startNodeIDX, startNodeIDY, targetNodeID, targetNodeIDX, targetNodeIDY;
         int edgeID = 0;
         int nodeID = 0;
@@ -43,12 +39,31 @@ public class graphModel {
         double cost;
         boolean edgeExists;
 
+        // insert graphID into database
+        newDatabaseConnection.insertUpdateDelete("INSERT INTO graph (graphID) VALUES " + '(' + this.graphID + ')');
+
+        // Get random adresses
+        ResultSet result = newDatabaseConnection.read("SELECT * FROM adres ORDER BY RAND() LIMIT " + this.nodeList.length);
+
+        // 3. Calculate cost of every edge
         // add every node to the nodeList
         while (result.next()) {
             // System.out.println(nodeID);
             nodeList[nodeID] = result.getInt("adresID");
             nodeID++;
         }
+
+        // insert every node in the database
+        String insertValues = "";
+        for (int node = 0; node < nodeList.length; node++) {
+            insertValues = insertValues + "(" + this.graphID + "," + nodeList[node] + ")";
+            if (node != nodeList.length-1) {
+                insertValues = insertValues + ",";
+            } else {
+                insertValues = insertValues + ";";
+            }
+        }
+        newDatabaseConnection.insertUpdateDelete("INSERT INTO graphnodes (graphID, nodeID) VALUES " + insertValues);
 
         // for every node
         for (int startNodeIndex = 1; startNodeIndex < this.nodeList.length + 1; startNodeIndex++) {
