@@ -1,55 +1,55 @@
 package view;
-import java.awt.event.ActionEvent;
+
 import java.awt.event.ActionListener;
-
 import javax.swing.*;
-import java.awt.*;
 
-public class MainMenu extends JFrame implements ActionListener{
+public class MainMenu extends JFrame{
   JMenuBar menuBar;
+
+	//menu's
 	JMenu productMenu;
-	JMenu contactMenu;
-	JMenu helpMenu;
-	JMenuItem returnProducts;
-	JMenuItem viewReturnedProducts;
-	JMenuItem exitItem;
-	//ImageIcon eenImage;
+	
+	//menu items
+	JMenuItem returnOrderProductsViewMenuItem;
+	JMenuItem returnedOrderListProductsviewMenuItem;
+	JMenuItem routeViewMenuItem;
 
   public MainMenu (JFrame frame) {
-	this.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-		this.setLayout(new FlowLayout());
-		
-		//eenImage = new ImageIcon("eenImage.png");
 		
 		menuBar = new JMenuBar();
-		
+
+		ImageIcon returnIcon = new ImageIcon("../test.png");
+
 		productMenu = new JMenu("Product");
-		
-		returnProducts = new JMenuItem("Retour aanmelden");
-		viewReturnedProducts = new JMenuItem("Bekijk geretourneerde producten");
-		
-		returnProducts.addActionListener(this);
-		viewReturnedProducts.addActionListener(this);
-		
-		productMenu.add(returnProducts);
-		productMenu.add(viewReturnedProducts);
+		returnOrderProductsViewMenuItem = new JMenuItem("Retour aanmelden", returnIcon);
+		returnedOrderListProductsviewMenuItem = new JMenuItem("Bekijk geretourneerde producten");
+		routeViewMenuItem = new JMenuItem("Ga naar route");
+
+
+		productMenu.add(returnOrderProductsViewMenuItem);
+		productMenu.add(returnedOrderListProductsviewMenuItem);
+		productMenu.add(routeViewMenuItem);
 		
 		menuBar.add(productMenu);
 		
 		frame.setJMenuBar(menuBar);
 	}
+
+	public void addMenuItemListeners(ActionListener addMenuItemListener){
+		returnOrderProductsViewMenuItem.addActionListener(addMenuItemListener);
+		returnedOrderListProductsviewMenuItem.addActionListener(addMenuItemListener);
+		routeViewMenuItem.addActionListener(addMenuItemListener);
+	}
+
+	public JMenuItem getReturnOrderProductsViewMenuItem() {
+		return returnOrderProductsViewMenuItem;
+	}
 	
-	@Override
-	public void actionPerformed(ActionEvent e) {
-		
-		if(e.getSource()==returnProducts) {
-			System.out.println("*beep boop* je wilt naar de product retourneer pagina");
-		}
-		if(e.getSource()==viewReturnedProducts) {
-			System.out.println("*beep boop* je wilt de lijst van geretourneerde producten zien");
-		}
-		if(e.getSource()==exitItem) {
-			System.exit(0);
-		}
+	public JMenuItem getReturnedOrderListProductsViewMenuItem() {
+		return returnedOrderListProductsviewMenuItem;
+	}
+
+	public JMenuItem getRouteViewMenuItem() {
+		return routeViewMenuItem;
 	}
 }

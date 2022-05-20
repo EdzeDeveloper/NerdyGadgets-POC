@@ -18,7 +18,6 @@ public class ListPanel extends JPanel {
     add( scroll, BorderLayout.CENTER );
     add( goToButton, BorderLayout.SOUTH);
     list.setPreferredSize(new Dimension(700, 700));
-    
   }
 
   public ListPanel(ArrayList arrayList, String buttonText, String listHeaderText) {
@@ -50,7 +49,7 @@ public class ListPanel extends JPanel {
 
   public Object getSelectedProduct() {
     // System.out.print(list.getSelectedValue());
-    System.out.println(list.getSelectedIndex());
+    System.out.println(list.getSelectedIndex() + 1);
     return list.getSelectedValue();
   }
 
