@@ -1,11 +1,9 @@
 package model;
 import java.sql.*;
-import java.util.ArrayList;
 
 public class newDatabaseConnection {
 
     public static Connection createConnection() throws SQLException {
-
         try {
             return DriverManager.getConnection("jdbc:mysql://localhost:3306/nerdygadgets", "root" , "");
         }
@@ -15,16 +13,25 @@ public class newDatabaseConnection {
         return null;
     }
 
-    public Boolean create(String updateQuery) throws SQLException {
-        try (Connection dbConnection = createConnection()) {
-            int i = createConnection().createStatement().executeUpdate(updateQuery);
-            if (i > 0) {
-                System.out.println("nieuwe item toegevoegd.");
-                return true;
+    public static void insertUpdateDelete(String updateQuery) throws SQLException {
+        // check of er connectie gemaakt kan worden (wordt daarna direct gesloten)
+        Connection dbConnection = createConnection();
+        try (dbConnection) {
+            int excecuteUpdate = createConnection().createStatement().executeUpdate(updateQuery);
+            if(excecuteUpdate > 0) {
+                System.out.println("item created / geupdated");
+            } else if (excecuteUpdate == 0) {
+                System.out.println("item deleted");
             }
-            System.out.println("Fout gegaan met toevoegen van item.");
+        } catch(SQLDataException e) {
+            System.err.println("SQLState: " +
+                    ((SQLException)e).getSQLState());
+
+            System.err.println("Error Code: " +
+                    ((SQLException)e).getErrorCode());
+        } finally {
+            dbConnection.close();
         }
-        return false;
     }
 
     public static ResultSet read(String query) throws SQLException {
@@ -32,18 +39,16 @@ public class newDatabaseConnection {
         Connection dbConnection = createConnection();
         try (dbConnection) {
             // als er connectie gemaakt kan worden deze
-            return createConnection().createStatement().executeQuery(query);
+            return createConnection().createStatement(ResultSet.TYPE_SCROLL_SENSITIVE, ResultSet.CONCUR_READ_ONLY).executeQuery(query);
+        } catch (SQLDataException e) {
+            System.err.println("SQLState: " +
+                    ((SQLException)e).getSQLState());
+
+            System.err.println("Error Code: " +
+                    ((SQLException)e).getErrorCode());
         } finally {
-            System.out.println("vgm is die nu closed2222");
             dbConnection.close();
         }
+        return null;
     }
-
-    // public update(String query) {
-
-    // }
-    // public delete(String query) {
-
-    // }
-
 }
