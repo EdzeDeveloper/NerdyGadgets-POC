@@ -21,8 +21,15 @@ public class main {
 
     // graphModel testGraph = new graphModel(100);
 
+//    newDatabaseConnection.insertUpdateDelete("SET foreign_key_checks = 0; TRUNCATE TABLE bestelling; TRUNCATE TABLE bestellingenlijst; TRUNCATE TABLE besteldeproducten;");
     OrderRepository orderRepository = new OrderRepository();
-    Order[] orderlist = orderRepository.generateOrders(8);
+    orderRepository.generateOrders(100);
+//    orderRepository.generateOrders(100);
+//    orderRepository.generateOrders(100);
+//    orderRepository.generateOrders(100);
+//    orderRepository.generateOrders(100);
+//    orderRepository.generateOrders(100);
+
 
     // theView.setVisible(true);
   }

@@ -26,6 +26,8 @@ public class Order {
 
 		this.bestelDatum = bestelDatum;
 		this.leverDatum = leverDatum;
+
+		this.besteldeProducten = besteldeProducten;
 	}
 
 	public int getBestellingID() { 
