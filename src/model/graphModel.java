@@ -1,5 +1,6 @@
 package model;
 
+import javax.xml.transform.Result;
 import java.sql.*;
 
 public class graphModel {
@@ -35,7 +36,6 @@ public class graphModel {
         int startNodeID, startNodeIDX, startNodeIDY, targetNodeID, targetNodeIDX, targetNodeIDY;
         int edgeID = 0;
         int nodeID = 0;
-        int createdEdgesCount = 0;
         double cost;
         boolean edgeExists;
 
@@ -43,67 +43,59 @@ public class graphModel {
         newDatabaseConnection.insertUpdateDelete("INSERT INTO graph (graphID) VALUES " + '(' + this.graphID + ')');
 
         // Get random adresses
-        ResultSet result = newDatabaseConnection.read("SELECT * FROM adres ORDER BY RAND() LIMIT " + this.nodeList.length);
+        ResultSet bestellingen = newDatabaseConnection.select("SELECT * FROM bestelling JOIN adres on leverAdresId = adresID ORDER BY RAND() LIMIT " + this.nodeList.length);
 
         // 3. Calculate cost of every edge
         // add every node to the nodeList
-        while (result.next()) {
-            // System.out.println(nodeID);
-            nodeList[nodeID] = result.getInt("adresID");
+        while (bestellingen.next()) {
+            nodeList[nodeID] = bestellingen.getInt("bestellingID");
             nodeID++;
         }
 
         // insert every node in the database
-        String insertValues = "";
-        for (int node = 0; node < nodeList.length; node++) {
-            insertValues = insertValues + "(" + this.graphID + "," + nodeList[node] + ")";
-            if (node != nodeList.length-1) {
-                insertValues = insertValues + ",";
-            } else {
-                insertValues = insertValues + ";";
-            }
+        String nodeInsertValues = "";
+        for (int node : nodeList) {
+            nodeInsertValues = nodeInsertValues + "INSERT INTO graphnodes (graphID, nodeID) VALUES " + "(" + this.graphID + "," + node + ");";
         }
-        newDatabaseConnection.insertUpdateDelete("INSERT INTO graphnodes (graphID, nodeID) VALUES " + insertValues);
+        newDatabaseConnection.insertUpdateDelete(nodeInsertValues);
+
 
         // for every node
         for (int startNodeIndex = 1; startNodeIndex < this.nodeList.length + 1; startNodeIndex++) {
             // get the x and y coordinates
-            result.absolute(startNodeIndex); // absolute() sets the active row in the table, has to be set manually because we switch back and forth between entries
-            startNodeID = result.getInt("adresID");
-            startNodeIDX = result.getInt("x");
-            startNodeIDY = result.getInt("y");
+            bestellingen.absolute(startNodeIndex); // absolute() sets the active row in the table, has to be set manually because we switch back and forth between entries
+            startNodeID = bestellingen.getInt("bestellingID");
+            startNodeIDX = bestellingen.getInt("x");
+            startNodeIDY = bestellingen.getInt("y");
 
             // for every other node also take the x and y coordinates
             for (int targetNodeIndex = 1; targetNodeIndex < this.nodeList.length + 1; targetNodeIndex++) {
 
                 if (startNodeIndex != targetNodeIndex) {
-                    result.absolute(targetNodeIndex); // absolute() sets the active row in the table, has to be set manually because we switch back and forth between entries
-                    targetNodeID = result.getInt("adresID");
+                    bestellingen.absolute(targetNodeIndex); // absolute() sets the active row in the table, has to be set manually because we switch back and forth between entries
+                    targetNodeID = bestellingen.getInt("bestellingID");
                     // check if the edge is already in the database
 
+                    ResultSet edgeInDatabase = newDatabaseConnection.select("SELECT * FROM edge WHERE (startNodeID = " + startNodeID + " AND targetNodeID = " + targetNodeID + ") OR (startNodeID = " + targetNodeID + " AND targetNodeID = " + startNodeID + ")");
                     edgeExists = false;
-                    for (int edge = 0; edge < createdEdgesCount; edge++) {
-                        if ((edgeList[edge].getStartNodeID() == startNodeID && edgeList[edge].getTargetNodeID() == targetNodeID) ||
-                                (edgeList[edge].getTargetNodeID() == startNodeID && edgeList[edge].getStartNodeID() == targetNodeID)) {
-                            edgeExists = true;
-                            break;
-                        }
+                    while(edgeInDatabase.next()){
+                        edgeExists = true;
                     }
+
                     if (!edgeExists) {
-                        targetNodeIDX = result.getInt("x");
-                        targetNodeIDY = result.getInt("y");
+                        targetNodeIDX = bestellingen.getInt("x");
+                        targetNodeIDY = bestellingen.getInt("y");
 
                         // calculate the distance between the nodes with the hypotenuse. Both x and y distance must be positive (absolute)
                         cost = Math.hypot(Math.abs(startNodeIDX - targetNodeIDX), Math.abs(startNodeIDY - targetNodeIDY));
 
                         edgeModel edge = new edgeModel(edgeID, startNodeID, targetNodeID, cost);
                         edgeList[edgeID] = edge;
+
                         // TODO insert into database
-                        // System.out.println(startNodeID + " - " + targetNodeID);
-                        // System.out.println(cost);
-                        // System.out.println("");
+                        newDatabaseConnection.insertUpdateDelete("INSERT INTO edge (edgeID, startNodeID, targetNodeID, cost) VALUES (" + edgeID + ", " + startNodeID + ", " + targetNodeID +  ", " + cost + "); INSERT INTO graphedges (graphID, edgeID) VALUES (" + graphID + ", " + edgeID + ");");
+
                         edgeID++;
-                        createdEdgesCount++;
                     }
                 }
             }

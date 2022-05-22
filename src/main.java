@@ -15,7 +15,7 @@ public class main {
 //    databaseConnection dbconnect = new databaseConnection();
 //
 //      theView.setVisible(true);
-    newDatabaseConnection.insertUpdateDelete("SET foreign_key_checks = 0; TRUNCATE TABLE graph");
-    graphModel graph = new graphModel(1, 100);
+    newDatabaseConnection.insertUpdateDelete("SET foreign_key_checks = 0; TRUNCATE TABLE graph; TRUNCATE TABLE graphnodes; TRUNCATE TABLE graphedges; TRUNCATE TABLE edge;");
+    graphModel graph = new graphModel(1, 14);
   }
 }

@@ -34,7 +34,7 @@ public class newDatabaseConnection {
         }
     }
 
-    public static ResultSet read(String query) throws SQLException {
+    public static ResultSet select(String query) throws SQLException {
         // check of er connectie gemaakt kan worden (wordt daarna direct gesloten)
         Connection dbConnection = createConnection();
         try (dbConnection) {
