@@ -48,9 +48,8 @@ public class ListPanel extends JPanel {
 	}
 
   public Object getSelectedProduct() {
-    // System.out.print(list.getSelectedValue());
-    System.out.println(list.getSelectedIndex() + 1);
-    return list.getSelectedValue();
+    System.out.print(list.getCellRenderer());
+    return list.getCellRenderer();
   }
 
   // public Object getListItemFromIndex(int index) {

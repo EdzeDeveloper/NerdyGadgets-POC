@@ -1,24 +1,33 @@
 package controller;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import repository.ReturnRepository;
+import model.Return;
+import model.DBConnection;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import view.ReturnedOrdersListView;
 
 public class ReturnOrderListController {
   private ReturnedOrdersListView view;
-	private ArrayList<String> testArrayList = new ArrayList<String>();
+	private ArrayList<Return> testArrayList = new ArrayList<Return>();
+
   
   public ReturnOrderListController(ReturnedOrdersListView returnOrderListView) throws SQLException {
+
+		ResultSet getAllPersonData = DBConnection.select("Select * from retour limit 10");
+    while(getAllPersonData.next()){
+      int bestellindID = getAllPersonData.getInt("bestellingID");
+      String reden = getAllPersonData.getString("reden");
+      int retourID = getAllPersonData.getInt("retourID");
+
+			Return Return = new Return(bestellindID, reden, retourID);
+
+			testArrayList.add(Return);
+    }
+
     view = returnOrderListView;
-		testArrayList.add("returned order 1");
-		testArrayList.add("returned order 2");
-		testArrayList.add("returned order 3");
-		testArrayList.add("returned order 4");
-		testArrayList.add("returned order 5");
-		testArrayList.add("returned order 6");
 		// view.addReturnedOrdersToList(ReturnRepository.getAllReturnedOrders());
 		view.addReturnedOrdersToList(testArrayList);
 		// System.out.print(ReturnRepository.getAllReturnedOrders());

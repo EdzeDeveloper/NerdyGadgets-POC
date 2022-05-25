@@ -4,6 +4,26 @@ public class Return {
 	private int bestellingID, retourID;
 	
 	private String reden;
+	
+	public Return(){}
+
+	public Return(int bestellingID, String reden, int retourID) {
+		this.bestellingID = bestellingID;
+		this.reden = reden;
+		this.retourID = retourID;
+	}
+
+	public void setRetourID(int retourID) { 
+		this.retourID = retourID; 
+	}
+
+	public void setReden(String reden) {
+		this.reden = reden; 
+   	}
+
+	public void setBestellingID(int bestellingID) { 
+		this.bestellingID = bestellingID; 
+	}
 
 	public int getRetourID() { 
 		return retourID; 
@@ -16,17 +36,4 @@ public class Return {
 	public int getBestellingID() { 
 		return bestellingID; 
 	}
-
-	public void setRetourID(int returnID) { 
-		this.retourID = returnID; 
-	}
-
-	public void setReden(String reden) {
-		this.reden = reden;
-   	}
-
-	public void setBestellingID(int bestellingID) { 
-		this.bestellingID = bestellingID; 
-	}
-	
 }

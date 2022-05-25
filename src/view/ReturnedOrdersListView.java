@@ -1,7 +1,6 @@
 package view;
 
 import javax.swing.*;
-import model.Return;
 import view.components.ListPanel;
 import java.util.ArrayList;
 import java.awt.event.ActionListener;

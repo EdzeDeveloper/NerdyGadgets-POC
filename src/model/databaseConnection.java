@@ -9,7 +9,7 @@ public class databaseConnection {
 	public databaseConnection() throws SQLException {
 		
 		try {
-			this.dbConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/nerdygadgets", "root" , "");
+			this.dbConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/nerdygadgets2", "root" , "");
 		}
 		catch (Exception exception) {
 			exception.printStackTrace();
@@ -118,11 +118,11 @@ public class databaseConnection {
 			result = statement.executeQuery("select * from retour");
 
 			while (result.next()) {
-				Return returnModel = new Return(); 
 
-				returnModel.setRetourID(result.getInt("retourID")); 
-				returnModel.setReden(result.getString("reden")); 
-				returnModel.setBestellingID(result.getInt("bestellingID")); 
+				int bestellingID = result.getInt("bestellingID"); 
+				String reden = result.getString("reden"); 
+				int retourID = result.getInt("retourID"); 
+				Return returnModel = new Return(bestellingID, reden, retourID); 
 
 				returnedOrders.add(returnModel);
 			}
