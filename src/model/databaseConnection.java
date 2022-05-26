@@ -11,6 +11,7 @@ public class databaseConnection {
 		
 		try {
 			this.myConnection = DriverManager.getConnection("jdbc:mysql://localhost:3306/nerdygadgets", "root" , "root");
+//			this.myConnection = DriverManager.getConnection("jdbc:mysql://145.44.235.61:80/nerdygadgets", "student" , "Welkom01!");
 		}
 		catch (Exception exception) {
 			exception.printStackTrace();

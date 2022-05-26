@@ -13,9 +13,9 @@ public class OrderRepository {
     }
 
     public boolean create(int bestellingID, int persoonID, int adresID, String status, Date bestelDatum, Date leverDatum) {
-            // do some create queries and return succes or failure.
+        // do some create queries and return succes or failure.
 
-            return true; //that was easy...
+        return true; //that was easy...
     }
     
     public Order findById(int id, boolean withOrderedProducts) throws SQLException {
