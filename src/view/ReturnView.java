@@ -44,8 +44,6 @@ public class ReturnView extends JFrame{
 		
 		this.add(ReturnPanel);
 		
-		// End of setting up the components --------
-		
 	}
 	
 	public int getOrderNumber(){

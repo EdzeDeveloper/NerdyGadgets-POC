@@ -1,24 +1,25 @@
 import java.sql.SQLException;
 
-import controller.ReturnController;
-import view.ReturnView;
-
+import controller.MainController;
+import model.Return;
+import repository.ReturnRepository;
 public class main {
-    
   public static void main(String[] args) throws SQLException {
-    
-    // CalculatorView theView = new CalculatorView();
-      
-    // CalculatorModel theModel = new CalculatorModel();
-      
-    // CalculatorController theController = new CalculatorController(theView,theModel);
-      
-    // theView.setVisible(true);
 
-    ReturnView returnView = new ReturnView();
+    // new MainController();
+    ReturnRepository returnRepo = new ReturnRepository();
+    Return getRetour  = returnRepo.get(1);
+    System.out.print(getRetour.getReden());
+    // ReturnedOrdersListView returnOrderListView = new ReturnedOrdersListView(mainFrame);
       
-    ReturnController returnController = new ReturnController(returnView);
-      
-    returnView.setVisible(true);
+    // new ReturnOrderListController(returnOrderListView);
+
+    // ResultSet getAllPersonData = newDatabaseConnection.select("Select * from Persoon limit 10");
+    // while(getAllPersonData.next()){
+    //   System.out.println(getAllPersonData.getString("voornaam"));
+    // }
+    // newDatabaseConnection.insertUpdateDelete("INSERT INTO persoon (persoonID, voornaam, achternaam, adresID, email) VALUES ('69420', 'edze', 'van der werff', '3889', 's1177499@student.windesheim.nl')");
+    // newDatabaseConnection.insertUpdateDelete("DELETE FROM persoon WHERE persoonID = '69420'");
+    // newDatabaseConnection.insertUpdateDelete("UPDATE persoon SET voornaam = 'hotty42069' WHERE persoonID = '69420'");
   }
 }

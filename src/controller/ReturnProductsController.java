@@ -9,11 +9,11 @@ import repository.OrderRepository;
 import view.ReturnView;
 
 
-public class ReturnController {
+public class ReturnProductsController {
 	
 	private ReturnView returnView;
 	
-	public ReturnController(ReturnView returnView) throws SQLException {
+	public ReturnProductsController(ReturnView returnView) throws SQLException {
 		this.returnView = returnView;
 
 		this.returnView.addSearchButtonListener(new ReturnListener());
