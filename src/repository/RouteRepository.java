@@ -1,181 +1,108 @@
 package repository;
+import model.Edge;
+import model.Order;
+import model.Route;
+import repository.interfaces.CrudInterface;
+import model.DBConnection;
+import java.util.ArrayList;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
 
-import model.*;
+public class RouteRepository implements CrudInterface<Route> {
+    private Connection con = DBConnection.getConnection();
 
-import java.util.Arrays;
-import java.util.Collections;
-
-public class RouteRepository {
-    private Route Route;
-    private graphModel graphModel;
-    private int[] deliveryList;
-
-    public RouteRepository(int numberOfNodes) {
-        Route = new Route(numberOfNodes);
-        graphModel = Route.getGraphModel();
-        deliveryList = new int[numberOfNodes];
+    @Override
+    public void add(Route obj) throws SQLException {
+        String query = "INSERT INTO route (routeID, aantalkm, graphID) VALUES (?,?,?)";
+        PreparedStatement preparedStatement = con.prepareStatement(query);
+        preparedStatement.setInt(1, obj.getRouteId());
+        preparedStatement.setDouble(2, obj.getAantalkm());
+        preparedStatement.setInt(3, obj.getGraphID());
+        preparedStatement.executeUpdate();
     }
 
-    public Route nearestNeighbor() {
-        int[] nodeList = graphModel.getNodeList();
-        edgeModel[] edgeList = graphModel.getEdgeList();
-        int aantalkm = 0;
-
-        // Add the first node to the list
-        deliveryList[0] = nodeList[0];
-
-        // Compile a list of all edges connected to the current node
-
-        for (int delivery = 0; delivery < deliveryList.length - 1; delivery++) {
-            edgeModel[] edgesConnectedToNode = new edgeModel[nodeList.length - 1];
-            int deliveryNodeID = deliveryList[delivery];
-
-            int edgesConnectedToNodeIndex = 0;
-            for (edgeModel edge : edgeList) {
-                int startNodeID = edge.getStartNodeID();
-                int targetNodeID = edge.getTargetNodeID();
-                if (startNodeID == deliveryNodeID || targetNodeID == deliveryNodeID) {
-                    edgesConnectedToNode[edgesConnectedToNodeIndex] = edge;
-                    edgesConnectedToNodeIndex++;
-                    if (edgesConnectedToNodeIndex == edgesConnectedToNode.length) {
-                        break;
-                    }
-                }
-            }
-
-            int lowestCostEdgeID;
-            double lowestCostEdgeCost = -1;
-            int nextNode = 0;
-            for (edgeModel edge : edgesConnectedToNode) {
-                double cost = edge.getCost();
-                if (lowestCostEdgeCost == -1 || cost < lowestCostEdgeCost) {
-                    int edgeStartNodeID = edge.getStartNodeID();
-                    int edgeTargetNodeID = edge.getTargetNodeID();
-
-                    int nextNodeTemp = 0;
-                    if (deliveryList[delivery] == edgeStartNodeID){
-                        nextNodeTemp = edgeTargetNodeID;
-                    } else {
-                        nextNodeTemp = edgeStartNodeID;
-                    }
-
-                    // Check if the node is already in the deliverylist
-                    boolean nodeIsInDeliveryList = false;
-                    for (int deliveryNode = 0; deliveryNode < edgesConnectedToNodeIndex; deliveryNode++) {
-                        if (deliveryList[deliveryNode] == nextNodeTemp){
-                            nodeIsInDeliveryList = true;
-                            break;
-                        }
-                    }
-
-                    if (!nodeIsInDeliveryList) {
-                        nextNode = nextNodeTemp;
-                        lowestCostEdgeCost = cost;
-                    }
-
-                }
-                if (cost == 0){
-                    break;
-                }
-            }
-            aantalkm += lowestCostEdgeCost;
-            deliveryList[delivery+1] = nextNode;
+    public void addDeliveryOrder(ArrayList<Order> deliveryList, int routeID) throws SQLException {
+        int orderNumber = 0;
+        for (Order order : deliveryList) {
+            String query = "INSERT INTO bestellingenlijst (routeID, bestellingID, routeVolgordeNummer) VALUES (?,?,?)";
+            PreparedStatement preparedStatement = con.prepareStatement(query);
+            preparedStatement.setInt(1, routeID);
+            preparedStatement.setInt(2, order.getBestellingID());
+            preparedStatement.setInt(3, orderNumber);
+            preparedStatement.executeUpdate();
+            orderNumber++;
         }
-
-        Route.setDeliveryOrder(deliveryList);
-        Route.setAantalkm(aantalkm);
-        return Route;
     }
 
-    public Route twoOpt() {
-        int[] nodeList = graphModel.getNodeList();
-        edgeModel[] edgeList = graphModel.getEdgeList();
+     public ArrayList<Order> getDeliveryOrder(int routeID) throws SQLException {
+         String query = "select * from bestellingenlijst where routeID= ? ORDER BY routeVolgordeNummer";
+         PreparedStatement preparedStatement = con.prepareStatement(query);
+         preparedStatement.setInt(1, routeID);
 
-        // Perform 2-changes for every edge
-        for (int delivery = 0; delivery < deliveryList.length - 1; delivery++) {
-            int startNodeID1 = deliveryList[delivery];
-            int targetNodeID1 = deliveryList[delivery+1];
+         ResultSet resultSet = preparedStatement.executeQuery();
+         ArrayList<Order> deliveryOrder = new ArrayList<>();
+         OrderRepository orderRepository = new OrderRepository();
 
-            // get the current edge information
-            int currentEdgeID1 = 0;
-            double currentEdgeCost1 = 0;
+         while(resultSet.next()) {
+             deliveryOrder.add(orderRepository.get(resultSet.getInt("bestellingID")));
+         }
+         return deliveryOrder;
+     }
 
-            // save the current best edge cost
-            double bestCost = -1;
-            int bestStartNode2 = -1;
-            int bestTargetNode2 = -1;
+    @Override
+    public Route get(int id) throws SQLException {
+        String query = "select * from route where routeID= ?";
+        PreparedStatement preparedStatement = con.prepareStatement(query);
+        preparedStatement.setInt(1, id);
 
-            // loop through all nodes and perform a 2-change if possible
-            for (int node = 0; node < nodeList.length - 2; node++) {
-                int startNodeID2 = deliveryList[node];
-                int targetNodeID2 = deliveryList[node+1];
+        Route routeInstance = new Route();
+        ResultSet resultSet = preparedStatement.executeQuery();
+        boolean check = false;
 
-                // check if there is a possible 2-change
-                if (startNodeID1 == startNodeID2 || startNodeID1 == targetNodeID2 || targetNodeID1 == startNodeID2 || targetNodeID1 == targetNodeID2) {
-                    continue;
-                }
-
-                // get the edge information of the possible 2-change
-                int currentEdgeID2 = 0;
-                double currentEdgeCost2 = 0;
-
-                //save current situation
-                double currentCost = currentEdgeCost1 + currentEdgeCost2;
-                if (bestCost == -1) {
-                    bestCost = currentCost;
-                }
-
-                // perform a 2-change
-                    // get the edge from startNode1 to targetNode2
-                int targetEdgeID1 = 0;
-                double targetEdgeCost1 = 0;
-
-                    // get the edge from startNode1 to targetNode2
-                int targetEdgeID2 = 0;
-                double targetEdgeCost2 = 0;
-
-                // save target situation
-                double targetCost = targetEdgeCost1 + targetEdgeCost2;
-
-                // compare the old situation to the new situation, if its better switch the targets
-                if (targetCost < bestCost){
-                    bestCost = targetCost;
-                    bestStartNode2 = startNodeID2;
-                    bestTargetNode2 = targetNodeID2;
-                }
-            }
-
-            // check if there is a better 2-change, if not go to next delivery
-            if (targetNodeID1 == -1){
-                continue;
-            }
-
-            // if there is a better 2-change, edit the route
-            int firstNodeIndex = -1;
-            int secondNodeIndex = -1;
-            for (int deliveryNumber = 0; deliveryNumber < deliveryList.length - 1; deliveryNumber++) {
-                if (deliveryList[deliveryNumber] == targetNodeID1 || deliveryList[deliveryNumber] == bestStartNode2){
-                    if (firstNodeIndex == -1) {
-                        firstNodeIndex = deliveryNumber;
-                    } else {
-                        secondNodeIndex = deliveryNumber;
-                        break;
-                    }
-                }
-            }
-
-            // grab the part to be reversed and reverse it
-            int lengthToReverse = secondNodeIndex - firstNodeIndex;
-            int[] partToReverse = new int[lengthToReverse];
-            System.arraycopy(deliveryList, firstNodeIndex, partToReverse, 0, lengthToReverse);
-            Collections.reverse(Arrays.asList(partToReverse));
-
-            // insert the reversed part back into the deliveryList
-            System.arraycopy(partToReverse, 0, deliveryList, firstNodeIndex, lengthToReverse);
+        while (resultSet.next()) {
+            check = true;
+            routeInstance.setRouteId(resultSet.getInt("routeID"));
+            routeInstance.setAantalkm(resultSet.getInt("aantalkm"));
+            routeInstance.setGraphID(resultSet.getInt("graphID"));
         }
 
+        if (check) {
+            return routeInstance;
+        }
+        return null;
+    }
 
+    @Override
+    public ArrayList<Route> getAll(String key) throws SQLException {
+        return null;
+    }
 
-        return Route;
+    @Override
+    public void Update(Route obj) throws SQLException {
+        String query = "UPDATE route SET aantalkm = ? WHERE routeID = ?";
+        PreparedStatement preparedStatement = con.prepareStatement(query);
+        preparedStatement.setDouble(1, obj.getAantalkm());
+        preparedStatement.setInt(2, obj.getRouteId());
+        preparedStatement.executeUpdate();
+    }
+
+    public void updateDeliveryOrder(ArrayList<Order> deliveryList, int routeID) throws SQLException {
+        int orderNumber = 0;
+        for (Order order : deliveryList) {
+            String query = "UPDATE bestellingenlijst SET routeVolgordeNummer = ? WHERE routeID = ? AND bestellingID = ?";
+            PreparedStatement preparedStatement = con.prepareStatement(query);
+            preparedStatement.setInt(1, orderNumber);
+            preparedStatement.setInt(2, routeID);
+            preparedStatement.setInt(3, order.getBestellingID());
+            preparedStatement.executeUpdate();
+            orderNumber++;
+        }
+    }
+
+    @Override
+    public void Delete(String key) throws SQLException {
+
     }
 }

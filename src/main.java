@@ -1,7 +1,8 @@
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import model.*;
-import repository.RouteRepository;
+import repository.*;
 
 public class main {
     
@@ -17,11 +18,29 @@ public class main {
 //
 //    theView.setVisible(true);
 
-    RouteRepository routeRepository = new RouteRepository(100);
-    Route route = routeRepository.nearestNeighbor();
-    System.out.println(route.getAantalkm());
+    newDatabaseConnection.insertUpdateDelete("SET foreign_key_checks = 0; TRUNCATE TABLE route; TRUNCATE TABLE bestellingenlijst;");
 
-    routeRepository.twoOpt();
+    RouteRepository routeRepository = new RouteRepository();
+    Route route = new Route(1);
+    routeRepository.add(route);
+    ArrayList<Order> deliveryOrder = route.nearestNeighbor();
+    routeRepository.Update(route);
+    routeRepository.addDeliveryOrder(deliveryOrder, route.getRouteId());
+    System.out.println("Nearest Neighbor:" + route.getAantalkm() + " meter");
+
+    for (int i = 1; i < 4; i++) {
+      double currentAantalkm = route.getAantalkm();
+      deliveryOrder = route.twoOpt();
+      routeRepository.Update(route);
+      routeRepository.updateDeliveryOrder(deliveryOrder, route.getRouteId());
+      double newAantalkm = route.getAantalkm();
+      if (newAantalkm == currentAantalkm) {
+        System.out.println("2-opt found the best route in " + (i - 1) + " itterations: " + newAantalkm + " meter");
+        break;
+      }
+      System.out.println("2-opt iteration " + i + ": " + route.getAantalkm() + " meter");
+    }
+
 
   }
 }
