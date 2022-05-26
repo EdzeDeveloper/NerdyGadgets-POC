@@ -3,7 +3,6 @@ package repository;
 import model.DBConnection;
 import model.Order;
 import model.Product;
-import model.Return;
 import repository.interfaces.CrudInterface;
 
 import java.sql.*;
@@ -17,13 +16,6 @@ public class OrderRepository implements CrudInterface<Order> {
 
         return true; //that was easy...
     }
-    
-//    public Order findById(int id, boolean withOrderedProducts) throws SQLException {
-//
-//        Order order = this.database.findOrderByIdQuery(id, withOrderedProducts);
-//
-//        return order;
-//    }
 
     private Order findOrder(int id) throws SQLException {
         Order order = new Order();
