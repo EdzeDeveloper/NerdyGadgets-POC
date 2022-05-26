@@ -23,11 +23,7 @@ public class ReturnProductsController {
 		private OrderRepository orderRepository;
 
 		public void actionPerformed(ActionEvent e) {
-			try {
-				this.orderRepository = new OrderRepository();
-			} catch (SQLException e1) {
-				e1.printStackTrace();
-			}
+			this.orderRepository = new OrderRepository();
 
 			int orderNumber;
 			try{
@@ -35,7 +31,7 @@ public class ReturnProductsController {
 				orderNumber = returnView.getOrderNumber();
 				
         		// wanneer je het ordernummer hebt, haal de order op uit de database.
-				Order order = orderRepository.findById(orderNumber, true);
+				Order order = orderRepository.find(orderNumber);
 				
         		//haal het resultaat op door de getCalculationValue functie.
 				returnView.setOrder(order);

@@ -1,15 +1,21 @@
 import java.sql.SQLException;
 
-import controller.MainController;
+import model.Order;
 import model.Return;
+import repository.OrderRepository;
 import repository.ReturnRepository;
+
 public class main {
   public static void main(String[] args) throws SQLException {
 
     // new MainController();
     ReturnRepository returnRepo = new ReturnRepository();
-    Return getRetour  = returnRepo.get(1);
-    System.out.print(getRetour.getReden());
+    Return Retour  = returnRepo.find(1);
+    System.out.print(Retour.getReden());
+
+    OrderRepository orderRepo = new OrderRepository();
+    Order Order  = orderRepo.find(1, true);
+    System.out.print(Order.getBesteldeProducten().toString());
     // ReturnedOrdersListView returnOrderListView = new ReturnedOrdersListView(mainFrame);
       
     // new ReturnOrderListController(returnOrderListView);

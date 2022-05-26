@@ -8,42 +8,36 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ReturnRepository implements CrudInterface<Return>{
+public class ReturnRepository implements CrudInterface<Return> {
     private Connection con = DBConnection.getConnection();
 
-    @Override
-    public void add(Return obj) throws SQLException {
+    public void create(Return obj) throws SQLException {
       // TODO Auto-generated method stub
       
     }
 
-    @Override
-    public Return get(int id) throws SQLException {
+    public Return find(int id) throws SQLException {
+      Return returnInstance = new Return();
+
       String query
-      = "select * from retour where retourID= ?";
+          = "select * from retour where retourID= ?";
       PreparedStatement preparedStatement
           = con.prepareStatement(query);
 
       preparedStatement.setInt(1, id);
-      Return returnInstance = new Return();
       ResultSet resultSet = preparedStatement.executeQuery();
-      boolean check = false;
 
       while (resultSet.next()) {
-          check = true;
           returnInstance.setBestellingID(resultSet.getInt("bestellingID"));
           returnInstance.setReden(resultSet.getString("reden"));
           returnInstance.setRetourID(resultSet.getInt("retourID"));
       }
 
-      if (check == true) {
-          return returnInstance;
-      }
-      return null;
+      //We don't need a check, when we can't find the ID in db, we just return an empty object.
+      return returnInstance;
     }
 
-    @Override
-    public void Update(Return obj) throws SQLException {
+    public void update(Return obj) throws SQLException {
       // TODO Auto-generated method stub
         
       // String query
@@ -57,14 +51,12 @@ public class ReturnRepository implements CrudInterface<Return>{
       // ps.executeUpdate();
     }
 
-    @Override
-    public void Delete(String key) throws SQLException {
+    public void delete(String key) throws SQLException {
       // TODO Auto-generated method stub
       
     }
 
-    @Override
-    public ArrayList<Return> getAll(String key) throws SQLException {
+    public ArrayList<Return> findAll(String key) throws SQLException {
       // // TODO Auto-generated method stubString query = "select * from Return";
       // PreparedStatement ps
       //     = con.prepareStatement(query);

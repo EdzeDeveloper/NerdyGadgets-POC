@@ -5,18 +5,18 @@ import java.util.ArrayList;
 
 public interface CrudInterface<T>
 {
-    public void add(T obj)
+    public void create(T obj)
     throws SQLException;
 
-    public T get(int id)
+    public T find(int id)
     throws SQLException;
     
-    public ArrayList<T> getAll(String key)
+    public ArrayList<T> findAll(String key)
     throws SQLException;
     
-    public void Update(T obj)
+    public void update(T obj)
     throws SQLException;
     
-    public void Delete(String key)
+    public void delete(String key)
     throws SQLException;
 }
