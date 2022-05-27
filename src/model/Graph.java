@@ -58,9 +58,16 @@ public class Graph {
         // Insert graph into database
         graphRepository.add(this);
 
-        // Get random adresses and add them to the graphnodes table
+        // Get random adresses and add them to nodeList
         ArrayList<Order> nodeList = orderRepository.getRandomOrdersWithAdres(numberOfNodes);
         orderRepository.addGraphNodes(nodeList, this.graphID);
+
+        // Add NerdyGadgets warehouse as first and last node
+        Order nerdyGadgetsWarehouse = orderRepository.get(-1);
+        nodeList.add(0, nerdyGadgetsWarehouse);
+        Order nerdyGadgetsWarehouse2 = orderRepository.get(-2);
+        nodeList.add(nerdyGadgetsWarehouse2);
+
 
         // Calculate cost of every edge
         for (int startNodeIndex = 0; startNodeIndex < nodeList.size(); startNodeIndex++) {

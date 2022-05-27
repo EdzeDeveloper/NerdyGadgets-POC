@@ -18,7 +18,8 @@ public class main {
 //
 //    theView.setVisible(true);
 
-    int numberOfNodes = 100;
+
+    int numberOfNodes = 50;
 
     System.out.println("Creating graph...");
     long startTime = System.nanoTime();

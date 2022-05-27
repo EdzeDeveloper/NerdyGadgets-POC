@@ -11,7 +11,17 @@ public class AdresRepository implements CrudInterface<Adres> {
 
     @Override
     public void add(Adres obj) throws SQLException {
-
+        String query = "INSERT INTO adres (adresID, straatnaam, huisnummer, huisletter, postcode, woonplaats, x, y) VALUES (?,?,?,?,?,?,?,?)";
+        PreparedStatement preparedStatement = con.prepareStatement(query);
+        preparedStatement.setInt(1, obj.getAdresId());
+        preparedStatement.setString(2, obj.getStraatnaam());
+        preparedStatement.setInt(3, obj.getHuisnummer());
+        preparedStatement.setString(3, obj.getHuisletter());
+        preparedStatement.setString(3, obj.getPostcode());
+        preparedStatement.setString(3, obj.getWoonplaats());
+        preparedStatement.setInt(3, obj.getX());
+        preparedStatement.setInt(3, obj.getY());
+        preparedStatement.executeUpdate();
     }
 
     @Override
