@@ -78,10 +78,6 @@ public class ReturnProductsView extends JPanel{
 
 		productsGridPanel.add( reasonArea );
 
-//		productsToReturn.forEach((productID, quantityField) -> {
-//			productsGridPanel.add(quantityField);
-//		});
-
 		//Add the panel to our frame.
 		this.add(new JSeparator());
 		this.add(productsGridPanel);
