@@ -11,7 +11,10 @@ public class GraphRepository implements CrudInterface<Graph> {
 
     @Override
     public void add(Graph obj) throws SQLException {
-
+        String query = "INSERT INTO graph (graphID) VALUES (?)";
+        PreparedStatement preparedStatement = con.prepareStatement(query);
+        preparedStatement.setInt(1, obj.getGraphID());
+        preparedStatement.executeUpdate();
     }
 
     @Override

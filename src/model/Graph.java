@@ -1,5 +1,10 @@
 package model;
 
+import repository.AdresRepository;
+import repository.EdgeRepository;
+import repository.GraphRepository;
+import repository.OrderRepository;
+
 import java.sql.*;
 import java.util.ArrayList;
 
@@ -36,71 +41,73 @@ public class Graph {
         this.graphID = graphID;
     }
 
-//	public void createGraph() throws SQLException {
-//
-//        // Get random adresses
-//        ResultSet result = newDatabaseConnection.select("SELECT * FROM adres ORDER BY RAND() LIMIT " + this.nodeList.length);
-//
-//
-//        // 3. Calculate cost of every edge
-//        int startNodeID, startNodeIDX, startNodeIDY, targetNodeID, targetNodeIDX, targetNodeIDY;
-//        int edgeID = 0;
-//        int nodeID = 0;
-//        int createdEdgesCount = 0;
-//        double cost;
-//        boolean edgeExists;
-//
-//        // add every node to the nodeList
-//        while (result.next()) {
-//            // System.out.println(nodeID);
-//            nodeList[nodeID] = result.getInt("adresID");
-//            nodeID++;
-//        }
-//
-//        // for every node
-//        for (int startNodeIndex = 1; startNodeIndex < this.nodeList.length + 1; startNodeIndex++) {
-//            // get the x and y coordinates
-//            result.absolute(startNodeIndex); // absolute() sets the active row in the table, has to be set manually because we switch back and forth between entries
-//            startNodeID = result.getInt("adresID");
-//            startNodeIDX = result.getInt("x");
-//            startNodeIDY = result.getInt("y");
-//
-//            // for every other node also take the x and y coordinates
-//            for (int targetNodeIndex = 1; targetNodeIndex < this.nodeList.length + 1; targetNodeIndex++) {
-//
-//                if (startNodeIndex != targetNodeIndex) {
-//                    result.absolute(targetNodeIndex); // absolute() sets the active row in the table, has to be set manually because we switch back and forth between entries
-//                    targetNodeID = result.getInt("adresID");
-//                    // check if the edge is already in the database
-//
-//                    edgeExists = false;
-//                    for (int edge = 0; edge < createdEdgesCount; edge++) {
-//                        if ((edgeList[edge].getStartNodeID() == startNodeID && edgeList[edge].getTargetNodeID() == targetNodeID) ||
-//                                (edgeList[edge].getTargetNodeID() == startNodeID && edgeList[edge].getStartNodeID() == targetNodeID)) {
-//                            edgeExists = true;
-//                            break;
-//                        }
-//                    }
-//                    if (!edgeExists) {
-//                        targetNodeIDX = result.getInt("x");
-//                        targetNodeIDY = result.getInt("y");
-//
-//                        // calculate the distance between the nodes with the hypotenuse. Both x and y distance must be positive (absolute)
-//                        cost = Math.hypot(Math.abs(startNodeIDX - targetNodeIDX), Math.abs(startNodeIDY - targetNodeIDY));
-//
-//                        Edge edge = new Edge(edgeID, startNodeID, targetNodeID, cost);
-//                        edgeList[edgeID] = edge;
-//                        // TODO insert into database
-//                        // System.out.println(startNodeID + " - " + targetNodeID);
-//                        // System.out.println(cost);
-//                        // System.out.println("");
-//                        edgeID++;
-//                        createdEdgesCount++;
-//                    }
-//                }
-//            }
-//        }
-//    }
+	public void createGraph(int numberOfNodes) throws SQLException {
+
+        EdgeRepository edgeRepository = new EdgeRepository();
+        OrderRepository orderRepository = new OrderRepository();
+        AdresRepository adresRepository = new AdresRepository();
+        GraphRepository graphRepository = new GraphRepository();
+        ArrayList<Edge> edgeList = new ArrayList<>();
+
+        int startNodeID, startNodeIDX, startNodeIDY, targetNodeID, targetNodeIDX, targetNodeIDY;
+        int edgeID = 0;
+        int createdEdgesCount = 0;
+        double cost;
+        boolean edgeExists;
+
+        // Insert graph into database
+        graphRepository.add(this);
+
+        // Get random adresses and add them to the graphnodes table
+        ArrayList<Order> nodeList = orderRepository.getRandomOrdersWithAdres(numberOfNodes);
+        orderRepository.addGraphNodes(nodeList, this.graphID);
+
+        // Calculate cost of every edge
+        for (int startNodeIndex = 0; startNodeIndex < nodeList.size(); startNodeIndex++) {
+            // get the x and y coordinates
+            Order startNode = nodeList.get(startNodeIndex);
+            Adres startNodeAdres = adresRepository.get(startNode.getAdresID());
+            startNodeID = startNode.getBestellingID();
+            startNodeIDX = startNodeAdres.getX();
+            startNodeIDY = startNodeAdres.getY();
+
+            // for every other node also take the x and y coordinates
+            for (int targetNodeIndex = 0; targetNodeIndex < nodeList.size(); targetNodeIndex++) {
+
+                if (startNodeIndex != targetNodeIndex) {
+                    Order targetNode = nodeList.get(targetNodeIndex);
+                    targetNodeID = targetNode.getBestellingID();
+                    // check if the edge is already in the database
+
+                    edgeExists = false;
+                    for (int edge = 0; edge < createdEdgesCount; edge++) {
+                        if ((edgeList.get(edge).getStartNodeID() == startNodeID && edgeList.get(edge).getTargetNodeID() == targetNodeID) ||
+                                (edgeList.get(edge).getTargetNodeID() == startNodeID && edgeList.get(edge).getStartNodeID() == targetNodeID)) {
+                            edgeExists = true;
+                            break;
+                        }
+                    }
+                    if (!edgeExists) {
+                        Adres targetNodeAdres = adresRepository.get(targetNode.getAdresID());
+                        targetNodeIDX = targetNodeAdres.getX();
+                        targetNodeIDY = targetNodeAdres.getY();
+
+                        // calculate the distance between the nodes with the hypotenuse. Both x and y distance must be positive (absolute)
+                        cost = Math.hypot(Math.abs(startNodeIDX - targetNodeIDX), Math.abs(startNodeIDY - targetNodeIDY));
+
+                        Edge edge = new Edge(edgeID, startNodeID, targetNodeID, cost);
+                        edgeList.add(edgeID, edge);
+                        // insert into database
+                        edgeRepository.add(edge);
+                        edgeID++;
+                        createdEdgesCount++;
+                    }
+                }
+            }
+        }
+        // Add the graphEdges to the database
+        edgeRepository.addGraphEdges(edgeList, this.graphID);
+    }
 
     public int getGraphID() {
         return graphID;

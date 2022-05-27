@@ -21,7 +21,7 @@ public class newDatabaseConnection {
             if(excecuteUpdate > 0) {
                 System.out.println("item created / geupdated");
             } else if (excecuteUpdate == 0) {
-                System.out.println("item deleted");
+//                System.out.println("item deleted");
             }
         } catch(SQLDataException e) {
             System.err.println("SQLState: " +

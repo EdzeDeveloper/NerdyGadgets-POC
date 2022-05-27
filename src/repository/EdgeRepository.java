@@ -11,7 +11,23 @@ public class EdgeRepository implements CrudInterface<Edge> {
 
     @Override
     public void add(Edge obj) throws SQLException {
+        String query = "INSERT INTO edge (edgeID, startNodeID, targetNodeID, cost) VALUES (?,?,?,?)";
+        PreparedStatement preparedStatement = con.prepareStatement(query);
+        preparedStatement.setInt(1, obj.getEdgeID());
+        preparedStatement.setInt(2, obj.getStartNodeID());
+        preparedStatement.setInt(3, obj.getTargetNodeID());
+        preparedStatement.setDouble(4, obj.getCost());
+        preparedStatement.executeUpdate();
+    }
 
+    public void addGraphEdges(ArrayList<Edge> edges, int graphID) throws SQLException {
+        for (Edge edge : edges) {
+            String query = "INSERT INTO graphedges (graphID, edgeID) VALUES (?,?)";
+            PreparedStatement preparedStatement = con.prepareStatement(query);
+            preparedStatement.setInt(1, graphID);
+            preparedStatement.setInt(2, edge.getEdgeID());
+            preparedStatement.executeUpdate();
+        }
     }
 
     @Override

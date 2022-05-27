@@ -123,6 +123,7 @@ public class Route {
       Order targetNode1 = deliveryOrder.get(delivery + 1);
 
       double currentCost = -1;
+      double costSaved = 0;
 
       // get the current edge information
       EdgeRepository edgeRepository = new EdgeRepository();
@@ -164,6 +165,7 @@ public class Route {
         // compare the old situation to the new situation, if its better switch the targets
         if (targetCost < currentCost){
           bestCost = targetCost;
+          costSaved = currentCost - bestCost;
           bestAlternateNode = startNode2;
         }
       }
@@ -189,7 +191,8 @@ public class Route {
 
       // grab the part to be reversed
       Collections.reverse(deliveryOrder.subList(firstNodeIndex, secondNodeIndex));
-      this.aantalkm -= (currentCost - bestCost);
+      routeRepository.updateDeliveryOrder(deliveryOrder, this.routeId);
+      this.aantalkm -= costSaved;
     }
     return deliveryOrder;
   }
