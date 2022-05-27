@@ -36,4 +36,9 @@ public class Return {
 	public int getBestellingID() { 
 		return bestellingID; 
 	}
+
+	@Override
+	public String toString() { 
+			return "Retour bestelling : " + Integer.toString(bestellingID); 
+	}    
 }

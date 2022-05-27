@@ -33,7 +33,7 @@ public class MainController {
   JPanel returnOrderListViewJpanel;
   JPanel panelSecond = new JPanel();
   JPanel routeView = new JPanel();
-  CardLayout cardLayout = new CardLayout();;
+  CardLayout cardLayout = new CardLayout();
   
   public MainController() throws SQLException {
     mainFrame = new JFrame("NerdyGadgets");
@@ -43,7 +43,7 @@ public class MainController {
     //initialize return order list view
     returnOrderListView = new ReturnedOrdersListView();
     
-    returnOrderListController = new ReturnOrderListController(returnOrderListView);
+    returnOrderListController = new ReturnOrderListController(returnOrderListView, mainFrame);
     returnOrderListViewJpanel = returnOrderListView.getListPanel();
 
     panelSecond.setBackground(Color.GREEN);
@@ -63,6 +63,7 @@ public class MainController {
     //show first panel.
 
     mainFrame.add(panelController);
+    mainFrame.pack();
     mainFrame.setSize(800, 800); 
     mainFrame.setDefaultCloseOperation( JFrame.EXIT_ON_CLOSE );
     mainFrame.setVisible(true);
@@ -71,15 +72,12 @@ public class MainController {
   class addMenuItemListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
       if(e.getSource()==returnOrderProductsViewMenuItem) {
-        System.out.println("*beep boop* je wilt naar de product retourneer pagina");
         cardLayout.show(panelController, "startPagina");
       }
       if(e.getSource()==returnedOrderListProductsViewMenuItem) {
-        System.out.println("*beep boop* je wilt de lijst van geretourneerde producten zien");
         cardLayout.show(panelController, "returnOrderList");
       }
       if(e.getSource()==routeViewMenuItem) {
-        System.out.println("*beep boop* je wilt de lijst van geretourneerde producten zien");
         cardLayout.show(panelController, "viewRoute");
       }
     }

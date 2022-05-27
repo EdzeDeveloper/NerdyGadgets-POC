@@ -1,45 +1,76 @@
 package controller;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import javax.swing.DefaultListModel;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
 
+import model.Bestelling;
 import model.Return;
-import model.DBConnection;
+import view.ReturnedOrdersListView;
+import repository.BestellingRepository;
+import repository.ReturnRepository;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import view.ReturnedOrdersListView;
-
 public class ReturnOrderListController {
   private ReturnedOrdersListView view;
-	private ArrayList<Return> testArrayList = new ArrayList<Return>();
-
   
-  public ReturnOrderListController(ReturnedOrdersListView returnOrderListView) throws SQLException {
-
-		ResultSet getAllPersonData = DBConnection.select("Select * from retour limit 10");
-    while(getAllPersonData.next()){
-      int bestellindID = getAllPersonData.getInt("bestellingID");
-      String reden = getAllPersonData.getString("reden");
-      int retourID = getAllPersonData.getInt("retourID");
-
-			Return Return = new Return(bestellindID, reden, retourID);
-
-			testArrayList.add(Return);
-    }
-
-    view = returnOrderListView;
-		// view.addReturnedOrdersToList(ReturnRepository.getAllReturnedOrders());
-		view.addReturnedOrdersToList(testArrayList);
-		// System.out.print(ReturnRepository.getAllReturnedOrders());
-    view.addGoToButtonListener(new ReturnedOrderListGoToButtonListener());
-  }
-
-  class ReturnedOrderListGoToButtonListener implements ActionListener{
-		public void actionPerformed(ActionEvent e) {
-			try {
-				view.getSelectedProduct();
-			} catch (Exception e1) {
-			}
+  public ReturnOrderListController(ReturnedOrdersListView returnOrderListView, JFrame mainframe) throws SQLException {
+		DefaultListModel<Return> DefaultListModelReturnedOrders = new DefaultListModel<>();
+		
+		//haal alle geretourneerde orders op
+		ReturnRepository returnRepo = new ReturnRepository();
+		ResultSet returnOrdersResultSet  = returnRepo.getAll();
+		while (returnOrdersResultSet.next()) {
+			Return returnInstance = new Return();
+			returnInstance.setBestellingID(returnOrdersResultSet.getInt("bestellingID"));
+			returnInstance.setReden(returnOrdersResultSet.getString("reden"));
+			returnInstance.setRetourID(returnOrdersResultSet.getInt("retourID"));
+			DefaultListModelReturnedOrders.addElement(returnInstance);
 		}
+    view = returnOrderListView;
+		view.setListModel(DefaultListModelReturnedOrders);	
+
+		JList returnList = view.getReturnList();
+		JLabel returnLabel = view.getReturnListLabel();
+		// get bestellingen repository
+		BestellingRepository<Bestelling> bestellingRepo = new BestellingRepository();
+
+		
+		// set toekomstige button listeners voor het goed/afkeuren van producten
+		view.addAcceptListener(new vieuwReturnedItemsEventListener());
+		view.addDeclineListener(new vieuwReturnedItemsEventListener());
+
+		//listener voor de geselecteerde item
+		returnList.getSelectionModel().addListSelectionListener(e -> {
+			Return R = (Return) returnList.getSelectedValue();
+			Bestelling geselecteerdeBestelling;
+			// probeer een bestelling met producten op te halen
+			try {
+				geselecteerdeBestelling = bestellingRepo.get(R.getRetourID());
+				view.addLabels(geselecteerdeBestelling.getBesteldeProducten());
+				returnLabel.setText("Bestelling ID: " + R.getBestellingID());
+
+				//voeg buttons toe aan de panel van de producten lijst.
+				view.addAccept();
+				view.addDecline();
+
+				// System.out.print(geselecteerdeBestelling);
+			} catch (SQLException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+
+		});
+
+
+  }
+	class vieuwReturnedItemsEventListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			System.out.print(e.getActionCommand());
+		
+		}
+
 	}
 }

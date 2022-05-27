@@ -1,5 +1,6 @@
 package repository;
-import model.Return;
+
+import model.Product;
 import repository.interfaces.CrudInterface;
 import model.DBConnection;
 import java.sql.Connection;
@@ -7,38 +8,37 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 
-public class ReturnRepository<T> implements CrudInterface<Return>{
+public class ProductRepository<T> implements CrudInterface<Product>{
     private Connection con = DBConnection.getConnection();
 
     @Override
-    public void add(Return obj) throws SQLException {
+    public void add(Product obj) throws SQLException {
       // TODO Auto-generated method stub
       
     }
 
     @Override
-    public Return get(int id) throws SQLException {
+    public Product get(int id) throws SQLException {
       String query
-      = "select * from retour where retourID= ?";
+      = "select * from product where productID= ?";
       PreparedStatement preparedStatement
           = con.prepareStatement(query);
 
       preparedStatement.setInt(1, id);
-      Return returnInstance = new Return();
       ResultSet resultSet = preparedStatement.executeQuery();
       boolean check = false;
-
+      Product returnProductInstance = new Product();
       while (resultSet.next()) {
-          check = true;
-          returnInstance.setBestellingID(resultSet.getInt("bestellingID"));
-          returnInstance.setReden(resultSet.getString("reden"));
-          returnInstance.setRetourID(resultSet.getInt("retourID"));
+        check = true;
+        returnProductInstance.setProductID(resultSet.getInt("productID"));
+        returnProductInstance.setProductNaam(resultSet.getString("productnaam"));
+        returnProductInstance.setPrijs(resultSet.getString("prijs"));
       }
 
       if (check == true) {
-          return returnInstance;
+          return returnProductInstance;
       }
-      return null;
+      return returnProductInstance;
     }
 
     @Override
@@ -73,3 +73,4 @@ public class ReturnRepository<T> implements CrudInterface<Return>{
       return resultSet;
     }
   }
+
