@@ -13,6 +13,12 @@ public class Order {
 
 	private ArrayList<Product> besteldeProducten;
 
+	public static final String STATUS_ORDERED = "Besteld";
+	public static final String STATUS_SHIPPED = "Verzonden";
+	public static final String STATUS_RECEIVED = "Ontvangen";
+	public static final String STATUS_RETURN_REGISTERED = "Retour aangemeld";
+	public static final String STATUS_RETURN_ACCEPTED = "retour geaccepteerd";
+
 	public Order() {
 		this.besteldeProducten = new ArrayList<Product>(); // initiate with empty list.
 	}

@@ -1,4 +1,5 @@
 package repository;
+import model.Order;
 import model.Return;
 import repository.interfaces.CrudInterface;
 import model.DBConnection;
@@ -22,7 +23,7 @@ public class ReturnRepository implements CrudInterface<Return> {
         preparedStatement.setInt(1, obj.getBestellingID());
         preparedStatement.setString(2, obj.getReden());
 
-        int rowsAffected = preparedStatement.executeUpdate();
+        preparedStatement.executeUpdate();
 
         //  Get the last inserted ID and set the retour ID to the obj.
         String lastIdQuery
@@ -56,6 +57,16 @@ public class ReturnRepository implements CrudInterface<Return> {
             }
         });
 
+        //Update order status into order.STATUS_RETURN_REGISTERED constant.
+        String updateStatusQuery
+                = "UPDATE bestelling SET status= ? WHERE bestellingID= ?;";
+        PreparedStatement updateStatusStatement
+                = con.prepareStatement(updateStatusQuery);
+
+        updateStatusStatement.setString(1, Order.STATUS_RETURN_REGISTERED);
+        updateStatusStatement.setInt(2, obj.getBestellingID());
+
+        updateStatusStatement.executeUpdate();
     }
 
     public Return find(int id) throws SQLException {
