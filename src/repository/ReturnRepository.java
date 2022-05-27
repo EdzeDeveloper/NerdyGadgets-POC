@@ -7,6 +7,7 @@ import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.Map;
 
 public class ReturnRepository implements CrudInterface<Return> {
     private Connection con = DBConnection.getConnection();
@@ -23,10 +24,38 @@ public class ReturnRepository implements CrudInterface<Return> {
 
         int rowsAffected = preparedStatement.executeUpdate();
 
-//        SELECT LAST_INSERT_ID();
-//        obj.setRetourID();
+        //  Get the last inserted ID and set the retour ID to the obj.
+        String lastIdQuery
+                = "SELECT LAST_INSERT_ID() as last_id;";
+        PreparedStatement lastIdStatement
+                = con.prepareStatement(lastIdQuery);
 
-        //insert into pivot tables.
+        ResultSet lastIdResult = lastIdStatement.executeQuery();
+        while (lastIdResult.next()) {
+            obj.setRetourID(lastIdResult.getInt("last_id"));
+        }
+
+        //insert products into product-return pivot table.
+        Map<Integer, Integer> returnedProducts = obj.getReturnedProducts();
+        returnedProducts.forEach((productID, quantity) -> {
+            try {
+                String pivotQuery
+                        = "INSERT INTO retourproducten (productID, retourID, aantal) " +
+                            "VALUES (?, ?, ?);";
+
+                PreparedStatement pivotStatement
+                        = con.prepareStatement(pivotQuery);
+
+                pivotStatement.setInt(1, productID);
+                pivotStatement.setInt(2, obj.getRetourID());
+                pivotStatement.setInt(3, quantity);
+
+                pivotStatement.executeUpdate();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });
+
     }
 
     public Return find(int id) throws SQLException {

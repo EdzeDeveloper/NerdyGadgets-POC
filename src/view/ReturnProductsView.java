@@ -18,11 +18,12 @@ public class ReturnProductsView extends JPanel{
 	private JTextField orderNumber  = new JTextField(10);
 	private JButton searchButton = new JButton("Zoek bestelde producten");
 
-	private JButton nextButton = new JButton("Volgende");
+	private JButton nextButton = new JButton("Retour aanmelden");
 
 	private Map<Integer, JTextField> productsToReturn = new HashMap<>();
 
-	
+	private JTextArea reasonArea = new JTextArea("Reden van retour", 6, 1);
+
 	public ReturnProductsView(){
 		
 		// Sets up the view and adds the components
@@ -39,6 +40,10 @@ public class ReturnProductsView extends JPanel{
 		
 		this.add(returnPanel);
 		
+	}
+
+	public String getReason(){
+		return reasonArea.getText();
 	}
 	
 	public int getOrderNumber(){
@@ -70,6 +75,8 @@ public class ReturnProductsView extends JPanel{
 
 			productsGridPanel.add(Box.createVerticalStrut(10));
 		}
+
+		productsGridPanel.add( reasonArea );
 
 //		productsToReturn.forEach((productID, quantityField) -> {
 //			productsGridPanel.add(quantityField);

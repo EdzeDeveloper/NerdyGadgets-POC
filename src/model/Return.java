@@ -64,4 +64,9 @@ public class Return {
 	public void addReturnedProduct(int productID, int quantity) {
 		returnedProducts.put(productID, quantity);
 	}
+
+	@Override
+	public String toString() {
+		return Integer.toString(retourID);
+	}
 }

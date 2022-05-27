@@ -38,9 +38,9 @@ public class ReturnProductsController {
 				searchButtonHandler(orderRepository);
 			}
 
-			if (Objects.equals(name, "Volgende")) {
+			if (Objects.equals(name, "Retour aanmelden")) {
 				try {
-					nextButtonHandler(orderRepository, returnRepository);
+					addReturnButtonHandler(orderRepository, returnRepository);
 				} catch (SQLException ex) {
 					ex.printStackTrace();
 				}
@@ -61,8 +61,6 @@ public class ReturnProductsController {
 
 			//haal het resultaat op door de getCalculationValue functie.
 			returnProductsView.setOrder(order);
-			System.out.println(order);
-
 		}
 
 		catch(NumberFormatException ex){
@@ -78,20 +76,20 @@ public class ReturnProductsController {
 		}
 	}
 
-	private void nextButtonHandler(OrderRepository orderRepository, ReturnRepository returnRepository) throws SQLException {
+	private void addReturnButtonHandler(OrderRepository orderRepository, ReturnRepository returnRepository) throws SQLException {
 		Map<Integer, JTextField> productsToReturn = returnProductsView.getProductsToReturn();
-		Integer orderID = returnProductsView.getOrderNumber();
+		int orderID = returnProductsView.getOrderNumber();
+		String reason = returnProductsView.getReason();
 
-		Return returnInstance = new Return(orderID, "reden");
+		Return returnInstance = new Return(orderID, reason);
 
 		productsToReturn.forEach((productID, quantityField) -> {
 			int quantity = Integer.parseInt( quantityField.getText() );
 			returnInstance.addReturnedProduct(productID, quantity);
 		});
 
-		System.out.println(returnInstance.getReturnedProducts());
-
 		returnRepository.create(returnInstance);
 
+		returnProductsView.displayErrorMessage("Uw retour is aangemeld, we zullen zo spoedig mogelijk contact met u opnemen.");
 	}
 }

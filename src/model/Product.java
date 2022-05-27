@@ -28,4 +28,9 @@ public class Product {
 	public String setProductNaam(String productNaam) { 
 		return this.productNaam = productNaam; 
 	}
+
+	@Override
+	public String toString() {
+		return productNaam;
+	}
 }
