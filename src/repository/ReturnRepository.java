@@ -12,8 +12,21 @@ public class ReturnRepository implements CrudInterface<Return> {
     private Connection con = DBConnection.getConnection();
 
     public void create(Return obj) throws SQLException {
-      // TODO Auto-generated method stub
-      
+        String query
+                = "INSERT INTO retour (bestellingID, reden) " +
+                "VALUES (?, ?);";
+        PreparedStatement preparedStatement
+                = con.prepareStatement(query);
+
+        preparedStatement.setInt(1, obj.getBestellingID());
+        preparedStatement.setString(2, obj.getReden());
+
+        int rowsAffected = preparedStatement.executeUpdate();
+
+//        SELECT LAST_INSERT_ID();
+//        obj.setRetourID();
+
+        //insert into pivot tables.
     }
 
     public Return find(int id) throws SQLException {
@@ -53,7 +66,7 @@ public class ReturnRepository implements CrudInterface<Return> {
 
     public void delete(String key) throws SQLException {
       // TODO Auto-generated method stub
-      
+
     }
 
     public ArrayList<Return> findAll(String key) throws SQLException {

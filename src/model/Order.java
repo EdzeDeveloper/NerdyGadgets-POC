@@ -67,4 +67,9 @@ public class Order {
 	public void setBesteldeProducten(ArrayList<Product> besteldeProducten) {
 		this.besteldeProducten = besteldeProducten;
 	}
+
+	@Override
+	public String toString() {
+		return Integer.toString(bestellingID);
+	}
 }
