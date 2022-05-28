@@ -91,7 +91,7 @@ public class OrderRepository implements CrudInterface<Order> {
 
     }
 
-    public ArrayList<Order> findAll(String key) throws SQLException {
+    public ResultSet findAll() throws SQLException {
         // // TODO Auto-generated method stubString query = "select * from Return";
         // PreparedStatement ps
         //     = con.prepareStatement(query);

@@ -1,5 +1,6 @@
 package repository.interfaces;
   
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
@@ -11,7 +12,7 @@ public interface CrudInterface<T>
     public T find(int id)
     throws SQLException;
     
-    public ArrayList<T> findAll(String key)
+    public ResultSet findAll()
     throws SQLException;
     
     public void update(T obj)

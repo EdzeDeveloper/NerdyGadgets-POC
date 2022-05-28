@@ -4,13 +4,28 @@ public class Product {
 	private int productID;
 
 	private String productNaam;
+	private String prijs;
 
 	public Product() {
+	}
+
+	public String getPrijs() {
+		return prijs;
+	}
+
+	public void setPrijs(String prijs) {
+		this.prijs = prijs;
 	}
 
 	public Product(int productID, String productNaam) {
 		this.productID = productID;
 		this.productNaam = productNaam;
+	}
+
+	public Product(int productID, String productNaam, String prijs) {
+		this.productID = productID;
+		this.productNaam = productNaam;
+		this.prijs = prijs;
 	}
 
 	public int getProductID() { 

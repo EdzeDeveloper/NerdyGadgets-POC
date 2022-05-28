@@ -69,4 +69,9 @@ public class Return {
 	public String toString() {
 		return Integer.toString(retourID);
 	}
+
+	@Override
+	public String toString() { 
+			return "Retour bestelling : " + Integer.toString(bestellingID); 
+	}    
 }

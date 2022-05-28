@@ -1,44 +1,86 @@
 package controller;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import javax.swing.DefaultListModel;
+import javax.swing.JFrame;
+import javax.swing.JLabel;
+import javax.swing.JList;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
+import model.Bestelling;
 import model.Return;
-import model.DBConnection;
+import view.ReturnedOrdersListView;
+import repository.BestellingRepository;
+import repository.ReturnRepository;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import view.ReturnedOrdersListView;
-
 public class ReturnOrderListController {
   private ReturnedOrdersListView view;
-	private ArrayList<Return> testArrayList = new ArrayList<Return>();
-
+  private JList returnList;
+	private BestellingRepository<Bestelling> bestellingRepo;
+	
   
-  public ReturnOrderListController(ReturnedOrdersListView returnOrderListView) throws SQLException {
+  public ReturnOrderListController(ReturnedOrdersListView returnOrderListView, JFrame mainframe) throws SQLException {
+		DefaultListModel<Return> DefaultListModelReturnedOrders = new DefaultListModel<>();
+		
+		//haal alle geretourneerde orders op
+		ReturnRepository returnRepo = new ReturnRepository();
+		ResultSet returnOrdersResultSet  = returnRepo.getAll();
+		while (returnOrdersResultSet.next()) {
+			Return returnInstance = new Return();
+			returnInstance.setBestellingID(returnOrdersResultSet.getInt("bestellingID"));
+			returnInstance.setReden(returnOrdersResultSet.getString("reden"));
+			returnInstance.setRetourID(returnOrdersResultSet.getInt("retourID"));
+			DefaultListModelReturnedOrders.addElement(returnInstance);
+		}
+    view = returnOrderListView;
+		view.setListModel(DefaultListModelReturnedOrders);	
 
-//	ResultSet getAllPersonData = DBConnection.select("Select * from retour limit 10");
-//    while(getAllPersonData.next()){
-//      int bestellindID = getAllPersonData.getInt("bestellingID");
-//      String reden = getAllPersonData.getString("reden");
-//      int retourID = getAllPersonData.getInt("retourID");
-//
-//			Return Return = new Return(bestellindID, reden, retourID);
-//
-//			testArrayList.add(Return);
-//    }
+		returnList = view.getReturnList();
+		// get bestellingen repository
+		bestellingRepo = new BestellingRepository();
 
-	view = returnOrderListView;
-	// view.addReturnedOrdersToList(ReturnRepository.getAllReturnedOrders());
-	view.addReturnedOrdersToList(testArrayList);
-	// System.out.print(ReturnRepository.getAllReturnedOrders());
-	view.addGoToButtonListener(new ReturnedOrderListGoToButtonListener());
+		
+		// set toekomstige button listeners voor het goed/afkeuren van producten
+		view.addAcceptListener(new vieuwReturnedItemsEventListener());
+		view.addDeclineListener(new vieuwReturnedItemsEventListener());
+
+		//listener voor de geselecteerde item
+		view.setReturnListListener(new returnListListener());
   }
-
-  class ReturnedOrderListGoToButtonListener implements ActionListener{
+	class vieuwReturnedItemsEventListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			try {
-				view.getSelectedProduct();
-			} catch (Exception e1) {
+			System.out.print(e.getActionCommand());
+		
+		}
+
+	}
+	// add listener to selected item
+	class returnListListener implements ListSelectionListener {
+
+		public void valueChanged (ListSelectionEvent e) {
+
+			
+			if (!e.getValueIsAdjusting()) {//This line prevents double events
+
+				Return R = (Return) returnList.getSelectedValue();
+				Bestelling geselecteerdeBestelling;
+				// probeer een bestelling met producten op te halen
+				try {
+					geselecteerdeBestelling = bestellingRepo.find(R.getRetourID());
+					view.emptyResultViewPanel();
+					// returnLabel.setText("Bestelling ID: " + R.getBestellingID());
+					view.createResultView(geselecteerdeBestelling);
+
+
+					//inistiate product information panel info.
+
+					// System.out.print(geselecteerdeBestelling);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
 			}
 		}
 	}
