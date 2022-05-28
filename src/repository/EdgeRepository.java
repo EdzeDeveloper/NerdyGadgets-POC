@@ -1,7 +1,6 @@
 package repository;
 import model.*;
-import repository.interfaces.CrudInterface;
-import model.DBConnection;
+import interfaces.CrudInterface;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -55,7 +54,7 @@ public class EdgeRepository implements CrudInterface<Edge> {
     }
 
     @Override
-    public ArrayList<Edge> getAll(String key) throws SQLException {
+    public ResultSet findAll() throws SQLException {
         return null;
     }
 
@@ -109,12 +108,14 @@ public class EdgeRepository implements CrudInterface<Edge> {
     }
 
     @Override
-    public void Update(Edge obj) throws SQLException {
-
+    public void update(Edge obj) throws SQLException {
+        // TODO Auto-generated method stub
+        
     }
 
     @Override
-    public void Delete(String key) throws SQLException {
-
+    public void delete(int id) throws SQLException {
+        // TODO Auto-generated method stub
+        
     }
 }

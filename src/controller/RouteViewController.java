@@ -1,16 +1,31 @@
+package controller;
+
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
-import controller.MainController;
-import model.*;
-import repository.*;
+import view.RouteView;
 
-public class main {
-  public static void main(String[] args) throws SQLException {
+public class RouteViewController {
+	
+	private RouteView routeView;
+	
+	public RouteViewController(RouteView routeView) throws SQLException {
+		this.routeView = routeView;
 
-    new MainController();
+		this.routeView.setCalculateRouteListener(new RouteViewListener());
+	}
+	
+	class RouteViewListener implements ActionListener {
+		public void actionPerformed(ActionEvent e) {
+			System.out.print(e.getSource());
+      System.out.print(routeView.getAmountOfOrderNumber());
+		}
+	}
+}
 
-    // int numberOfNodes = 10;
+
+// int numberOfNodes = 10;
 
     // System.out.println("Creating graph...");
     // long startTime = System.nanoTime();
@@ -58,5 +73,3 @@ public class main {
     // }
 
     // System.out.println("Klaar!");
-  }
-}

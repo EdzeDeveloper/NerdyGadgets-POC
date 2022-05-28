@@ -1,7 +1,6 @@
 package repository;
 import model.*;
-import repository.interfaces.CrudInterface;
-import model.DBConnection;
+import interfaces.CrudInterface;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -40,18 +39,20 @@ public class PersoonRepository implements CrudInterface<Persoon> {
     }
 
     @Override
-    public ArrayList<Persoon> getAll(String key) throws SQLException {
+    public ResultSet findAll() throws SQLException {
+        // TODO Auto-generated method stub
         return null;
     }
 
-
     @Override
-    public void Update(Persoon obj) throws SQLException {
-
+    public void update(Persoon obj) throws SQLException {
+        // TODO Auto-generated method stub
+        
     }
 
     @Override
-    public void Delete(String key) throws SQLException {
-
+    public void delete(int id) throws SQLException {
+        // TODO Auto-generated method stub
+        
     }
 }

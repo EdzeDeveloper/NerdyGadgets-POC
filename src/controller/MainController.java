@@ -13,6 +13,7 @@ import java.sql.SQLException;
 import view.MainMenu;
 import view.ReturnProductsView;
 import view.ReturnedOrdersListView;
+import view.RouteView;
 
 import java.awt.Color;
 
@@ -20,6 +21,7 @@ public class MainController {
   // init controllers  
   private ReturnOrderListController returnOrderListController;
   private ReturnProductsController returnProductsController;
+  private RouteViewController routeViewController;
 
   // default view
   private JFrame mainFrame;
@@ -31,38 +33,31 @@ public class MainController {
   //view components
   private ReturnedOrdersListView returnOrderListView;
   private ReturnProductsView returnProductsView;
+  private RouteView routeView;
 
-  //initialize views
+  //initialize views panels
   JPanel panelController = new JPanel();
   JPanel returnOrderListViewJpanel;
   JPanel returnProductsViewJpanel;
-  JPanel panelSecond;
-  JPanel routeView;
+  JPanel routeViewPanel;
   CardLayout cardLayout = new CardLayout();
   
   public MainController() throws SQLException {
     mainFrame = new JFrame("NerdyGadgets");
     // set the views
-    initializeViews();
-   
-    panelController.setLayout(cardLayout);
-
-    //initialize views
-    returnOrderListView = new ReturnedOrdersListView();
-    returnProductsView = new ReturnProductsView();
+    initializeViewPanels();
     
     returnOrderListController = new ReturnOrderListController(returnOrderListView, mainFrame);
     returnOrderListViewJpanel = returnOrderListView.getListPanel();
 
+    // init controllers
     returnProductsController = new ReturnProductsController(returnProductsView);
+    routeViewController = new RouteViewController(routeView);
 
-    panelSecond.setBackground(Color.GREEN);
-    routeView.setBackground(Color.YELLOW);
-    
     // add all panels to the panel controller
     panelController.add(returnProductsView, "returnProducts");
     panelController.add(returnOrderListViewJpanel, "returnOrderList");
-    panelController.add(routeView, "viewRoute");
+    panelController.add(routeViewPanel, "viewRoute");
 
     // get main menu with button listeners
     mainMenu = new MainMenu(mainFrame);
@@ -105,12 +100,16 @@ public class MainController {
       panelController.repaint();
   }
 
-  public void initializeViews() {
+  public void initializeViewPanels() {
+    // set panel controller
     panelController.setLayout(cardLayout);
+    // set views
+    returnProductsView = new ReturnProductsView();
     returnOrderListView = new ReturnedOrdersListView();
+    routeView = new RouteView();
+    //set panels
     returnOrderListViewJpanel = new ReturnedOrdersListView();
-    panelSecond = new JPanel();
-    routeView = new JPanel();
+    routeViewPanel = routeView.getRouteViewPanel();
   }
 }
 

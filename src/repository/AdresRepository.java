@@ -1,10 +1,8 @@
 package repository;
 import model.*;
-import repository.*;
-import repository.interfaces.CrudInterface;
+import interfaces.CrudInterface;
 
 import java.sql.*;
-import java.util.ArrayList;
 
 public class AdresRepository implements CrudInterface<Adres> {
     private Connection con = DBConnection.getConnection();
@@ -53,18 +51,20 @@ public class AdresRepository implements CrudInterface<Adres> {
     }
 
     @Override
-    public ArrayList<Adres> getAll(String key) throws SQLException {
+    public ResultSet findAll() throws SQLException {
+        // TODO Auto-generated method stub
         return null;
     }
 
-
     @Override
-    public void Update(Adres obj) throws SQLException {
-
+    public void update(Adres obj) throws SQLException {
+        // TODO Auto-generated method stub
+        
     }
 
     @Override
-    public void Delete(String key) throws SQLException {
-
+    public void delete(int id) throws SQLException {
+        // TODO Auto-generated method stub
+        
     }
 }

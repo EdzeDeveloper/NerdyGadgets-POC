@@ -2,7 +2,7 @@ package repository;
 import model.Edge;
 import model.Order;
 import model.Route;
-import repository.interfaces.CrudInterface;
+import interfaces.CrudInterface;
 import model.DBConnection;
 import java.util.ArrayList;
 import java.sql.Connection;
@@ -75,12 +75,7 @@ public class RouteRepository implements CrudInterface<Route> {
     }
 
     @Override
-    public ArrayList<Route> getAll(String key) throws SQLException {
-        return null;
-    }
-
-    @Override
-    public void Update(Route obj) throws SQLException {
+    public void update(Route obj) throws SQLException {
         String query = "UPDATE route SET aantalkm = ? WHERE routeID = ?";
         PreparedStatement preparedStatement = con.prepareStatement(query);
         preparedStatement.setDouble(1, obj.getAantalkm());
@@ -102,7 +97,14 @@ public class RouteRepository implements CrudInterface<Route> {
     }
 
     @Override
-    public void Delete(String key) throws SQLException {
+    public ResultSet findAll() throws SQLException {
+        // TODO Auto-generated method stub
+        return null;
+    }
 
+    @Override
+    public void delete(int id) throws SQLException {
+        // TODO Auto-generated method stub
+        
     }
 }
