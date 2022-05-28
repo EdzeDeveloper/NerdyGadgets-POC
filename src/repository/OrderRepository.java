@@ -3,10 +3,11 @@ package repository;
 import model.DBConnection;
 import model.Order;
 import model.Product;
-import repository.interfaces.CrudInterface;
 
 import java.sql.*;
 import java.util.ArrayList;
+
+import interfaces.CrudInterface;
 
 public class OrderRepository implements CrudInterface<Order> {
     private Connection con = DBConnection.getConnection();

@@ -1,4 +1,4 @@
-package repository.interfaces;
+package interfaces;
   
 import java.sql.ResultSet;
 import java.sql.SQLException;

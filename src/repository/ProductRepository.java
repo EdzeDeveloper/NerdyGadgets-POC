@@ -1,12 +1,13 @@
 package repository;
 
 import model.Product;
-import repository.interfaces.CrudInterface;
 import model.DBConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+
+import interfaces.CrudInterface;
 
 public class ProductRepository<T> implements CrudInterface<Product>{
     private Connection con = DBConnection.getConnection();

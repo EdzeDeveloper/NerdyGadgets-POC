@@ -1,7 +1,6 @@
 package repository;
 import model.Order;
 import model.Return;
-import repository.interfaces.CrudInterface;
 import model.DBConnection;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -9,6 +8,8 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Map;
+
+import interfaces.CrudInterface;
 
 public class ReturnRepository<T> implements CrudInterface<Return>{
     private Connection con = DBConnection.getConnection();

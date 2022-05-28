@@ -66,6 +66,7 @@ public class ReturnedOrdersListView extends JPanel{
 		splitPane.setRightComponent(resultViewPanel);
 
 		retourOrdersPanel.add(splitPane);
+		retourOrdersPanel.revalidate();
 	}
 
 	public JPanel getListPanel() {
@@ -100,7 +101,7 @@ public class ReturnedOrdersListView extends JPanel{
 	}
 
 	public void createResultView(Bestelling bestelling) {
-		JLabel bestellingID = new JLabel("BestellingID = " + Integer.toString(bestelling.getBestellingID()));
+		JLabel bestellingID = new JLabel("RetourID = " + Integer.toString(bestelling.getBestellingID()));
 		resultViewPanel.add(bestellingID);
 
 		for (int i = 0; i < bestelling.getBesteldeProducten().size(); i++)   

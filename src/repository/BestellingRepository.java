@@ -1,7 +1,6 @@
 package repository;
 
 import model.Bestelling;
-import repository.interfaces.CrudInterface;
 import model.DBConnection;
 import model.Product;
 
@@ -10,6 +9,8 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import interfaces.CrudInterface;
 
 public class BestellingRepository<T> implements CrudInterface<Bestelling>{
     private Connection con = DBConnection.getConnection();

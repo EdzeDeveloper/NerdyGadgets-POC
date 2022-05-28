@@ -86,7 +86,6 @@ public class MainController {
         }
         if(e.getSource()==returnedOrderListProductsViewMenuItem) {
           cardLayout.show(panelController, "returnOrderList");
-          returnProductsView.emptyReturnPanel();
         }
         if(e.getSource()==routeViewMenuItem) {
           cardLayout.show(panelController, "viewRoute");
