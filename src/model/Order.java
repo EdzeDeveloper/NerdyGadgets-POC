@@ -74,8 +74,40 @@ public class Order {
 		this.besteldeProducten = besteldeProducten;
 	}
 
+	public void setStatusToOrdered() {
+		this.status = STATUS_ORDERED;
+	}
+	public void setStatusToShipped() {
+		this.status = STATUS_SHIPPED;
+	}
+	public void setStatusToRecieved() {
+		this.status = STATUS_RECEIVED;
+	}
+	public void setStatusToReturnRegistered() {
+		this.status = STATUS_RETURN_REGISTERED;
+	}
+	public void setStatusToReturnAccepted() {
+		this.status = STATUS_RETURN_ACCEPTED;
+	}
+
 	@Override
 	public String toString() {
 		return Integer.toString(bestellingID);
 	}
+
+  public void setStatus(String status) {
+		this.status = status;
+  }
+
+  public void setBestelDatum(Date besteldatum) {
+		this.bestelDatum = besteldatum;
+  }
+
+  public void setLeverDatum(Date leverdatum) {
+		this.leverDatum = leverdatum;
+  }
+
+  public void setLeverAdresId(int adresID) {
+		this.adresID = adresID;
+  }
 }

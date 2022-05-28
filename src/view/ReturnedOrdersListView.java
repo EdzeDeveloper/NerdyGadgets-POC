@@ -11,7 +11,7 @@ import javax.swing.table.DefaultTableModel;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 
-import model.Bestelling;
+import model.Order;
 import model.Product;
 import model.Return;
 
@@ -100,7 +100,7 @@ public class ReturnedOrdersListView extends JPanel{
 		resultViewPanel.add(accept);
 	}
 
-	public void createResultView(Bestelling bestelling) {
+	public void createResultView(Order bestelling) {
 		JLabel bestellingID = new JLabel("RetourID = " + Integer.toString(bestelling.getBestellingID()));
 		resultViewPanel.add(bestellingID);
 
@@ -129,6 +129,12 @@ public class ReturnedOrdersListView extends JPanel{
 
 	public void setReturnListListener(ListSelectionListener vieuwReturnedItemsEventListener) {
 		returnList.getSelectionModel().addListSelectionListener(vieuwReturnedItemsEventListener);
+	}
+
+	public void displayErrorMessage(String errorMessage){
+		
+		JOptionPane.showMessageDialog(this, errorMessage);
+		
 	}
 }
 

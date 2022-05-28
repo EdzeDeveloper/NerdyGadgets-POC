@@ -13,7 +13,7 @@ public class DBConnection {
     String user = "root";
     String pass = "";
     try {
-        Class.forName("com.mysql.jdbc.Driver");
+        Class.forName("com.mysql.cj.jdbc.Driver");
         con = DriverManager.getConnection(url, user, pass);
     }
     catch (ClassNotFoundException | SQLException e) {

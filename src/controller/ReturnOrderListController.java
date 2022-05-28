@@ -8,18 +8,19 @@ import javax.swing.JList;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
-import model.Bestelling;
+import model.Order;
 import model.Return;
 import view.ReturnedOrdersListView;
-import repository.BestellingRepository;
+import repository.OrderRepository;
 import repository.ReturnRepository;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 public class ReturnOrderListController {
   private ReturnedOrdersListView view;
   private JList returnList;
-	private BestellingRepository<Bestelling> bestellingRepo;
-	private Bestelling geselecteerdeBestelling;
+	private OrderRepository<Order> bestellingRepo;
+	private Order geselecteerdeBestelling;
+	private int currentSelectedRetourId = 0;
 	
   
   public ReturnOrderListController(ReturnedOrdersListView returnOrderListView, JFrame mainframe) throws SQLException {
@@ -40,7 +41,7 @@ public class ReturnOrderListController {
 
 		returnList = view.getReturnList();
 		// get bestellingen repository
-		bestellingRepo = new BestellingRepository();
+		bestellingRepo = new OrderRepository();
 
 		
 		// set toekomstige button listeners voor het goed/afkeuren van producten
@@ -52,10 +53,21 @@ public class ReturnOrderListController {
   }
 	class vieuwReturnedItemsEventListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			if(e.getActionCommand() == "Accept") {
-				System.out.print("ik wil wat accepteren");
+			if("Accept".equals(e.getActionCommand())) {
+				if (currentSelectedRetourId > 0) {
+					try {
+						geselecteerdeBestelling.setStatusToRecieved();
+						bestellingRepo.update(geselecteerdeBestelling);
+						view.displayErrorMessage("Order is in goede orde aangekomen.");
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						view.displayErrorMessage("Er is iets mis gegaan met het aanpassen van de status van de order.");
+						e1.printStackTrace();
+					}
+					System.out.print("ik wil wat accepteren");
+				}
 			}
-			if(e.getActionCommand() == "Decline") {
+			if("Decline".equals(e.getActionCommand())) {
 				System.out.print("ik wil wat Decline");
 			}
 		}
@@ -70,11 +82,13 @@ public class ReturnOrderListController {
 			if (!e.getValueIsAdjusting()) {//This line prevents double events
 
 				Return R = (Return) returnList.getSelectedValue();
-				// probeer een bestelling met producten op te halen
+				currentSelectedRetourId = R.getRetourID();
+				// probeer een Order met producten op te halen
 				try {
-					geselecteerdeBestelling = bestellingRepo.find(R.getRetourID());
+					System.out.print(R.getRetourID());
+					geselecteerdeBestelling = bestellingRepo.findAndSetOrder(R.getRetourID());
 					view.emptyResultViewPanel();
-					// returnLabel.setText("Bestelling ID: " + R.getBestellingID());
+					// returnLabel.setText("Order ID: " + R.getBestellingID());
 					view.createResultView(geselecteerdeBestelling);
 
 					//inistiate product information panel info.

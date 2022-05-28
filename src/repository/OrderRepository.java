@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 import interfaces.CrudInterface;
 
-public class OrderRepository implements CrudInterface<Order> {
+public class OrderRepository<T> implements CrudInterface<Order> {
     private Connection con = DBConnection.getConnection();
 
     public boolean create(int bestellingID, int persoonID, int adresID, String status, Date bestelDatum, Date leverDatum) {
@@ -37,9 +37,58 @@ public class OrderRepository implements CrudInterface<Order> {
         return order;
     }
 
+    public Order findAndSetOrder(int id) throws SQLException {
+      String query
+      = "select * from bestelling where bestellingID= ?";
+      PreparedStatement preparedStatement
+          = con.prepareStatement(query);
+      Order returnOrderInstance = new Order();
+      preparedStatement.setInt(1, id);
+      ResultSet resultSet = preparedStatement.executeQuery();
+      boolean check = false;
+
+      while (resultSet.next()) {
+          check = true;
+          returnOrderInstance.setBestellingID(resultSet.getInt("bestellingID"));
+          returnOrderInstance.setPersoonID(resultSet.getInt("persoonID"));
+          returnOrderInstance.setStatus(resultSet.getString("status"));
+          returnOrderInstance.setBestelDatum(resultSet.getDate("besteldatum"));
+          returnOrderInstance.setLeverDatum(resultSet.getDate("leverdatum"));
+          returnOrderInstance.setLeverAdresId(resultSet.getInt("leverAdresId"));
+
+          //get producten van de bestelling
+          setAllOrderedProducts(returnOrderInstance);
+      }
+
+      if (check == true) {
+          return returnOrderInstance;
+      }
+      return null;
+    }
+
+    @Override
     public Order find(int id) throws SQLException {
         return findOrder(id);
     }
+
+    public Order setAllOrderedProducts(Order bestelling) throws SQLException {
+        ProductRepository ProductRepository = new ProductRepository();
+        String query
+        = "select * from besteldeproducten where bestellingID= ?";
+        PreparedStatement preparedStatement
+            = con.prepareStatement(query);
+  
+        ArrayList<Product> besteldeProducten = bestelling.getBesteldeProducten();
+  
+        preparedStatement.setInt(1, bestelling.getBestellingID());
+  
+        ResultSet resultSet = preparedStatement.executeQuery();
+        // add product aan lijst van de bestelling
+        while (resultSet.next()) {
+          besteldeProducten.add(ProductRepository.find(resultSet.getInt("productID")));
+        }
+        return bestelling;
+      }
 
     //method overloading to accept an extra argument that executes extra queries to get orderedProducts.
     public Order find(int id, boolean withOrderedProducts) throws SQLException {
