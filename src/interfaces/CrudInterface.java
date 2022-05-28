@@ -17,6 +17,6 @@ public interface CrudInterface<T>
     public void update(T obj)
     throws SQLException;
     
-    public void delete(String key)
+    public void delete(int id)
     throws SQLException;
 }

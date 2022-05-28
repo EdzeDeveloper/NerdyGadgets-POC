@@ -91,13 +91,6 @@ public class ReturnRepository<T> implements CrudInterface<Return>{
       return returnInstance;
     }
 
-
-
-    public void delete(String key) throws SQLException {
-      // TODO Auto-generated method stub
-
-    }
-
     @Override
     public ResultSet findAll() throws SQLException {
       String query
@@ -112,5 +105,17 @@ public class ReturnRepository<T> implements CrudInterface<Return>{
     @Override
     public void update(Return obj) {
         // TODO Auto-generated method stub
+    }
+
+    @Override
+    public void delete(int id) throws SQLException {
+        // TODO Auto-generated method stub
+        String query
+        = "delete from retour where retourID = ?";
+        PreparedStatement preparedStatement
+        = con.prepareStatement(query);
+        preparedStatement.setInt(1, id);
+        preparedStatement.executeUpdate();
+        
     }
   }

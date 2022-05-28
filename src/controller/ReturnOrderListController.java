@@ -12,6 +12,7 @@ import model.Order;
 import model.Return;
 import view.ReturnedOrdersListView;
 import repository.OrderRepository;
+import repository.ProductRepository;
 import repository.ReturnRepository;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -19,6 +20,8 @@ public class ReturnOrderListController {
   private ReturnedOrdersListView view;
   private JList returnList;
 	private OrderRepository<Order> bestellingRepo;
+	private ProductRepository productRepo;
+	private ReturnRepository returnRepo;
 	private Order geselecteerdeBestelling;
 	private int currentSelectedRetourId = 0;
 	
@@ -27,7 +30,8 @@ public class ReturnOrderListController {
 		DefaultListModel<Return> DefaultListModelReturnedOrders = new DefaultListModel<>();
 		
 		//haal alle geretourneerde orders op
-		ReturnRepository returnRepo = new ReturnRepository();
+		returnRepo = new ReturnRepository();
+		productRepo = new ProductRepository();
 		ResultSet returnOrdersResultSet  = returnRepo.findAll();
 		while (returnOrdersResultSet.next()) {
 			Return returnInstance = new Return();
@@ -47,28 +51,51 @@ public class ReturnOrderListController {
 		// set toekomstige button listeners voor het goed/afkeuren van producten
 		view.addAcceptListener(new vieuwReturnedItemsEventListener());
 		view.addDeclineListener(new vieuwReturnedItemsEventListener());
+		view.addRetourRecievedListener(new vieuwReturnedItemsEventListener());
 
 		//listener voor de geselecteerde item
 		view.setReturnListListener(new returnListListener());
   }
 	class vieuwReturnedItemsEventListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			if("Accept".equals(e.getActionCommand())) {
+			System.out.print(e.getActionCommand());
+			if("Retour in goede orde ontvangen".equals(e.getActionCommand())) {
 				if (currentSelectedRetourId > 0) {
 					try {
-						geselecteerdeBestelling.setStatusToRecieved();
+						geselecteerdeBestelling.setStatusToReturnRecieved();
 						bestellingRepo.update(geselecteerdeBestelling);
-						view.displayErrorMessage("Order is in goede orde aangekomen.");
+						returnRepo.delete(currentSelectedRetourId);
+						view.displayErrorMessage("Product status is gewijzigd naar : Retour ontvangen");
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
 						view.displayErrorMessage("Er is iets mis gegaan met het aanpassen van de status van de order.");
 						e1.printStackTrace();
 					}
-					System.out.print("ik wil wat accepteren");
 				}
 			}
-			if("Decline".equals(e.getActionCommand())) {
-				System.out.print("ik wil wat Decline");
+			if("Retour afwijzen".equals(e.getActionCommand())) {
+				try {
+					geselecteerdeBestelling.setStatusToReturnDeclined();
+					bestellingRepo.update(geselecteerdeBestelling);
+					view.displayErrorMessage("Product status is gewijzigd naar : afgewezen");
+					returnRepo.delete(currentSelectedRetourId);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					view.displayErrorMessage("Er is iets mis gegaan met het aanpassen van de status van de order.");
+					e1.printStackTrace();
+				}
+			}
+			if("Retour niet ontvangen".equals(e.getActionCommand())) {
+				try {
+					geselecteerdeBestelling.setStatusToReturnNOTRecieved();
+					bestellingRepo.update(geselecteerdeBestelling);
+					view.displayErrorMessage("Product status is gewijzigd naar : niet aangekomen");
+					returnRepo.delete(currentSelectedRetourId);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					view.displayErrorMessage("Er is iets mis gegaan met het aanpassen van de status van de order.");
+					e1.printStackTrace();
+				}
 			}
 		}
 
@@ -85,7 +112,6 @@ public class ReturnOrderListController {
 				currentSelectedRetourId = R.getRetourID();
 				// probeer een Order met producten op te halen
 				try {
-					System.out.print(R.getRetourID());
 					geselecteerdeBestelling = bestellingRepo.findAndSetOrder(R.getRetourID());
 					view.emptyResultViewPanel();
 					// returnLabel.setText("Order ID: " + R.getBestellingID());

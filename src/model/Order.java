@@ -17,7 +17,10 @@ public class Order {
 	public static final String STATUS_SHIPPED = "Verzonden";
 	public static final String STATUS_RECEIVED = "Ontvangen";
 	public static final String STATUS_RETURN_REGISTERED = "Retour aangemeld";
-	public static final String STATUS_RETURN_ACCEPTED = "retour geaccepteerd";
+	public static final String STATUS_RETURN_ACCEPTED = "Retour geaccepteerd";
+	public static final String STATUS_RETURN_Declined = "Retour gewijgerd";
+	public static final String STATUS_RETURN_Recieved = "Retour ontvangen";
+	public static final String STATUS_RETURN_NOTRecieved = "Retour niet ontvangen";
 
 	public Order() {
 		this.besteldeProducten = new ArrayList<Product>(); // initiate with empty list.
@@ -88,6 +91,15 @@ public class Order {
 	}
 	public void setStatusToReturnAccepted() {
 		this.status = STATUS_RETURN_ACCEPTED;
+	}
+	public void setStatusToReturnDeclined() {
+		this.status = STATUS_RETURN_Declined;
+	}
+	public void setStatusToReturnRecieved() {
+		this.status = STATUS_RETURN_Recieved;
+	}
+	public void setStatusToReturnNOTRecieved() {
+		this.status = STATUS_RETURN_NOTRecieved;
 	}
 
 	@Override

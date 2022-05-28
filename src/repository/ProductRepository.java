@@ -60,7 +60,7 @@ public class ProductRepository<T> implements CrudInterface<Product>{
     }
 
     @Override
-    public void delete(String key) throws SQLException {
+    public void delete(int id) throws SQLException {
       // TODO Auto-generated method stub
       
     }

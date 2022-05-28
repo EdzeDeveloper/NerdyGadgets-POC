@@ -117,21 +117,19 @@ public class OrderRepository<T> implements CrudInterface<Order> {
         return order;
     }
 
-    public void update(Order obj) throws SQLException {
-        // TODO Auto-generated method stub
-
-        // String query
-        // = "update Return set emp_name=?, "
-        //   + " emp_address= ? where emp_id = ?";
-        // PreparedStatement ps
-        // = con.prepareStatement(query);
-        // ps.setString(1, emp.getEmp_name());
-        // ps.setString(2, emp.getEmp_address());
-        // ps.setInt(3, emp.getEmp_id());
-        // ps.executeUpdate();
+    @Override
+    public void update(Order bestelling) throws SQLException {
+        String query
+        = "update bestelling set status=? "
+          + " where bestellingID = ?";
+        PreparedStatement preparedStatement
+        = con.prepareStatement(query);
+        preparedStatement.setString(1, bestelling.getStatus());
+        preparedStatement.setInt(2, bestelling.getBestellingID());
+        preparedStatement.executeUpdate();
     }
 
-    public void delete(String key) throws SQLException {
+    public void delete(Order bestelling) throws SQLException {
         // TODO Auto-generated method stub
 
     }
@@ -157,5 +155,11 @@ public class OrderRepository<T> implements CrudInterface<Order> {
         // }
         // return ls;
         return null;
+    }
+
+    @Override
+    public void delete(int id) throws SQLException {
+        // TODO Auto-generated method stub
+        
     }
 }

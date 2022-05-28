@@ -17,14 +17,13 @@ import model.Return;
 
 public class ReturnedOrdersListView extends JPanel{
 	private JList returnList;
-	private JPanel productPanel;
 	private JPanel retourOrdersPanel;
 	private JPanel resultViewPanel;
-	private JPanel productNameLabel;
 	private JSplitPane splitPane;
 	private int selectedBestellingID;
 	private JButton accept;
 	private JButton decline;
+	private JButton retourNotRecieved;
 	private JTable table;
 	private DefaultTableModel tableModel;
 
@@ -35,8 +34,6 @@ public class ReturnedOrdersListView extends JPanel{
 		resultViewPanel = new JPanel();
 		resultViewPanel.setPreferredSize(new Dimension(350, 350));
 		resultViewPanel.setBorder(BorderFactory.createLineBorder(Color.pink));
-		productPanel = new JPanel();
-		productNameLabel = new JPanel();
 
 		//set layout
 		retourOrdersPanel.setLayout(new BoxLayout(retourOrdersPanel, BoxLayout.X_AXIS));
@@ -52,10 +49,12 @@ public class ReturnedOrdersListView extends JPanel{
 		splitPane = new JSplitPane();
 
 		// new buttons and set them 
-		accept = new JButton("Accept");
-		decline = new JButton("Decline");
+		accept = new JButton("Retour in goede orde ontvangen");
+		decline = new JButton("Retour afwijzen");
+		retourNotRecieved = new JButton("Retour niet ontvangen");
 		accept.setVisible(false);
 		decline.setVisible(false);
+		retourNotRecieved.setVisible(false);
 	}
 
 	// wanneer een list binnen komt
@@ -73,21 +72,15 @@ public class ReturnedOrdersListView extends JPanel{
 		return retourOrdersPanel;
 	}
 
-
 	public Object getSelectedValue() {
 		return returnList.getSelectedValue();
 	}
-
 
 	public int getSelectedBestellingID() {
 		return selectedBestellingID;
 	}
 	public JList getReturnList() {
 		return returnList;
-	}
-	
-	public JButton getDecline() {
-		return decline;
 	}
 
 	public void addDeclineListener(ActionListener actionListener) {
@@ -98,6 +91,10 @@ public class ReturnedOrdersListView extends JPanel{
 	public void addAcceptListener(ActionListener actionListener) {
 		accept.addActionListener(actionListener);
 		resultViewPanel.add(accept);
+	}
+	public void addRetourRecievedListener(ActionListener actionListener) {
+		retourNotRecieved.addActionListener(actionListener);
+		resultViewPanel.add(retourNotRecieved);
 	}
 
 	public void createResultView(Order bestelling) {
@@ -113,8 +110,10 @@ public class ReturnedOrdersListView extends JPanel{
 		resultViewPanel.add(table);
 		resultViewPanel.add(accept);
 		resultViewPanel.add(decline);
+		resultViewPanel.add(retourNotRecieved);
 		accept.setVisible(true);
 		decline.setVisible(true);
+		retourNotRecieved.setVisible(true);
 		resultViewPanel.revalidate();
 	}
 
@@ -123,6 +122,7 @@ public class ReturnedOrdersListView extends JPanel{
 		tableModel.setRowCount(0);
 		accept.setVisible(false);
 		decline.setVisible(false);
+		retourNotRecieved.setVisible(false);
 		resultViewPanel.removeAll();
 		resultViewPanel.revalidate();
 	}
