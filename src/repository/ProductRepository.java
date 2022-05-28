@@ -12,12 +12,6 @@ public class ProductRepository<T> implements CrudInterface<Product>{
     private Connection con = DBConnection.getConnection();
 
     @Override
-    public void add(Product obj) throws SQLException {
-      // TODO Auto-generated method stub
-      
-    }
-
-    @Override
     public Product find(int id) throws SQLException {
       String query
       = "select * from product where productID= ?";
@@ -42,28 +36,7 @@ public class ProductRepository<T> implements CrudInterface<Product>{
     }
 
     @Override
-    public void Update() throws SQLException {
-      // TODO Auto-generated method stub
-        
-      // String query
-      // = "update Return set emp_name=?, "
-      //   + " emp_address= ? where emp_id = ?";
-      // PreparedStatement ps
-      // = con.prepareStatement(query);
-      // ps.setString(1, emp.getEmp_name());
-      // ps.setString(2, emp.getEmp_address());
-      // ps.setInt(3, emp.getEmp_id());
-      // ps.executeUpdate();
-    }
-
-    @Override
-    public void Delete(String key) throws SQLException {
-      // TODO Auto-generated method stub
-      
-    }
-
-    @Override
-    public ResultSet getAll() throws SQLException {
+    public ResultSet findAll() throws SQLException {
       String query
       = "select * from retour";
       PreparedStatement preparedStatement
@@ -71,6 +44,24 @@ public class ProductRepository<T> implements CrudInterface<Product>{
 
       ResultSet resultSet = preparedStatement.executeQuery();
       return resultSet;
+    }
+
+    @Override
+    public void create(Product obj) throws SQLException {
+      // TODO Auto-generated method stub
+      
+    }
+
+    @Override
+    public void update(Product obj) throws SQLException {
+      // TODO Auto-generated method stub
+      
+    }
+
+    @Override
+    public void delete(String key) throws SQLException {
+      // TODO Auto-generated method stub
+      
     }
   }
 

@@ -2,7 +2,6 @@ package repository.interfaces;
   
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 
 public interface CrudInterface<T>
 {

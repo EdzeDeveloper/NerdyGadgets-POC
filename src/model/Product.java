@@ -1,5 +1,7 @@
 package model;
 
+import java.sql.SQLException;
+
 public class Product {
 	private int productID;
 

@@ -15,7 +15,7 @@ public class BestellingRepository<T> implements CrudInterface<Bestelling>{
     private Connection con = DBConnection.getConnection();
 
     @Override
-    public void add(Bestelling obj) throws SQLException {
+    public void create(Bestelling obj) throws SQLException {
       // TODO Auto-generated method stub
       // doen we nog niets mee
       
@@ -53,28 +53,7 @@ public class BestellingRepository<T> implements CrudInterface<Bestelling>{
     }
 
     @Override
-    public void Update() throws SQLException {
-      // TODO Auto-generated method stub
-        
-      // String query
-      // = "update bestelling set status=?, "
-      //   + "where bestellingID = ?";
-      // PreparedStatement ps
-      // = con.prepareStatement(query);
-      // ps.setString(1, emp.getEmp_name());
-      // ps.setString(2, emp.getEmp_address());
-      // ps.setInt(3, emp.getEmp_id());
-      // ps.executeUpdate();
-    }
-
-    @Override
-    public void Delete(String key) throws SQLException {
-      // TODO Auto-generated method stub
-      
-    }
-
-    @Override
-    public ResultSet getAll() throws SQLException {
+    public ResultSet findAll() throws SQLException {
       String query
       = "select * from bestelling";
       PreparedStatement preparedStatement
@@ -101,5 +80,17 @@ public class BestellingRepository<T> implements CrudInterface<Bestelling>{
       }
 
       return bestelling;
+    }
+
+    @Override
+    public void update(Bestelling obj) throws SQLException {
+      // TODO Auto-generated method stub
+      
+    }
+
+    @Override
+    public void delete(String key) throws SQLException {
+      // TODO Auto-generated method stub
+      
     }
   }
