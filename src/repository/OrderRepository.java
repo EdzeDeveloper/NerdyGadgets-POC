@@ -162,4 +162,29 @@ public class OrderRepository<T> implements CrudInterface<Order> {
         // TODO Auto-generated method stub
         
     }
+
+    public void addGraphNodes(ArrayList<Order> nodes, int graphID) throws SQLException {
+        for (Order node : nodes) {
+            String query = "INSERT INTO graphnodes (graphID, nodeID) VALUES (?,?)";
+            PreparedStatement preparedStatement = con.prepareStatement(query);
+            preparedStatement.setInt(1, graphID);
+            preparedStatement.setInt(2, node.getBestellingID());
+            preparedStatement.executeUpdate();
+        }
+    }
+	
+    public ArrayList<Order> getNodesInGraph(int graphID) throws SQLException {
+        String query = "SELECT * FROM graphnodes WHERE graphID = ?";
+        PreparedStatement preparedStatement = con.prepareStatement(query);
+        preparedStatement.setInt(1, graphID);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        ArrayList<Order> nodeList = new ArrayList<>();
+
+
+        while(resultSet.next()) {
+            nodeList.add(find(resultSet.getInt("nodeID")));
+        }
+        return nodeList;
+    }
 }
