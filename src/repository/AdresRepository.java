@@ -10,7 +10,7 @@ public class AdresRepository implements CrudInterface<Adres> {
     private Connection con = DBConnection.getConnection();
 
     @Override
-    public void add(Adres obj) throws SQLException {
+    public void create(Adres obj) throws SQLException {
         String query = "INSERT INTO adres (adresID, straatnaam, huisnummer, huisletter, postcode, woonplaats, x, y) VALUES (?,?,?,?,?,?,?,?)";
         PreparedStatement preparedStatement = con.prepareStatement(query);
         preparedStatement.setInt(1, obj.getAdresId());
@@ -25,7 +25,7 @@ public class AdresRepository implements CrudInterface<Adres> {
     }
 
     @Override
-    public Adres get(int id) throws SQLException {
+    public Adres find(int id) throws SQLException {
         String query = "select * from adres where adresID= ?";
         PreparedStatement preparedStatement = con.prepareStatement(query);
         preparedStatement.setInt(1, id);

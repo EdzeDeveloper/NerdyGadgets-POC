@@ -10,7 +10,7 @@ public class GraphRepository implements CrudInterface<Graph> {
     private Connection con = DBConnection.getConnection();
 
     @Override
-    public void add(Graph obj) throws SQLException {
+    public void create(Graph obj) throws SQLException {
         String query = "INSERT INTO graph (graphID) VALUES (?)";
         PreparedStatement preparedStatement = con.prepareStatement(query);
         preparedStatement.setInt(1, obj.getGraphID());
@@ -18,7 +18,7 @@ public class GraphRepository implements CrudInterface<Graph> {
     }
 
     @Override
-    public Graph get(int id) throws SQLException {
+    public Graph find(int id) throws SQLException {
         String query = "select * from edge where edgeID= ?";
         PreparedStatement preparedStatement = con.prepareStatement(query);
         preparedStatement.setInt(1, id);

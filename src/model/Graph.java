@@ -56,16 +56,16 @@ public class Graph {
         boolean edgeExists;
 
         // Insert graph into database
-        graphRepository.add(this);
+        graphRepository.create(this);
 
         // Get random adresses and add them to nodeList
         ArrayList<Order> nodeList = orderRepository.getRandomOrdersWithAdres(numberOfNodes);
         orderRepository.addGraphNodes(nodeList, this.graphID);
 
         // Add NerdyGadgets warehouse as first and last node
-        Order nerdyGadgetsWarehouse = orderRepository.get(-1);
+        Order nerdyGadgetsWarehouse = orderRepository.find(-1);
         nodeList.add(0, nerdyGadgetsWarehouse);
-        Order nerdyGadgetsWarehouse2 = orderRepository.get(-2);
+        Order nerdyGadgetsWarehouse2 = orderRepository.find(-2);
         nodeList.add(nerdyGadgetsWarehouse2);
 
 
@@ -73,7 +73,7 @@ public class Graph {
         for (int startNodeIndex = 0; startNodeIndex < nodeList.size(); startNodeIndex++) {
             // get the x and y coordinates
             Order startNode = nodeList.get(startNodeIndex);
-            Adres startNodeAdres = adresRepository.get(startNode.getAdresID());
+            Adres startNodeAdres = adresRepository.find(startNode.getAdresID());
             startNodeID = startNode.getBestellingID();
             startNodeIDX = startNodeAdres.getX();
             startNodeIDY = startNodeAdres.getY();
@@ -95,7 +95,7 @@ public class Graph {
                         }
                     }
                     if (!edgeExists) {
-                        Adres targetNodeAdres = adresRepository.get(targetNode.getAdresID());
+                        Adres targetNodeAdres = adresRepository.find(targetNode.getAdresID());
                         targetNodeIDX = targetNodeAdres.getX();
                         targetNodeIDY = targetNodeAdres.getY();
 
@@ -105,7 +105,7 @@ public class Graph {
                         Edge edge = new Edge(edgeID, startNodeID, targetNodeID, cost);
                         edgeList.add(edgeID, edge);
                         // insert into database
-                        edgeRepository.add(edge);
+                        edgeRepository.create(edge);
                         edgeID++;
                         createdEdgesCount++;
                     }

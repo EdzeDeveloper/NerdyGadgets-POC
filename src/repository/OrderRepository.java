@@ -187,4 +187,31 @@ public class OrderRepository<T> implements CrudInterface<Order> {
         }
         return nodeList;
     }
+
+    public ArrayList<Order> getRandomOrdersWithAdres(int numberOfOrders) throws SQLException {
+        String query = "select * from bestelling JOIN adres a on bestelling.leverAdresId = a.adresID ORDER BY RAND() LIMIT ?";
+        PreparedStatement preparedStatement = con.prepareStatement(query);
+        preparedStatement.setInt(1, numberOfOrders);
+
+        ResultSet resultSet = preparedStatement.executeQuery();
+        boolean check = false;
+
+        ArrayList<Order> orderList = new ArrayList<>();
+        while (resultSet.next()) {
+            check = true;
+            Order orderInstance = new Order();
+            orderInstance.setBestellingID(resultSet.getInt("bestellingID"));
+            orderInstance.setPersoonID(resultSet.getInt("persoonID"));
+            orderInstance.setStatus(resultSet.getString("status"));
+            orderInstance.setBestelDatum(resultSet.getDate("besteldatum"));
+            orderInstance.setLeverDatum(resultSet.getDate("leverdatum"));
+            orderInstance.setLeverAdresId(resultSet.getInt("leverAdresID"));
+            orderList.add(orderInstance);
+        }
+
+        if (check) {
+            return orderList;
+        }
+        return null;
+    }
 }

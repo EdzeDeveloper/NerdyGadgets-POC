@@ -10,12 +10,12 @@ public class PersoonRepository implements CrudInterface<Persoon> {
     private Connection con = DBConnection.getConnection();
 
     @Override
-    public void add(Persoon obj) throws SQLException {
+    public void create(Persoon obj) throws SQLException {
 
     }
 
     @Override
-    public Persoon get(int id) throws SQLException {
+    public Persoon find(int id) throws SQLException {
         String query = "select * from persoon where persoonID= ?";
         PreparedStatement preparedStatement = con.prepareStatement(query);
         preparedStatement.setInt(1, id);

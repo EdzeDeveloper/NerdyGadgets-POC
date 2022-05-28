@@ -14,7 +14,7 @@ public class RouteRepository implements CrudInterface<Route> {
     private Connection con = DBConnection.getConnection();
 
     @Override
-    public void add(Route obj) throws SQLException {
+    public void create(Route obj) throws SQLException {
         String query = "INSERT INTO route (routeID, aantalkm, graphID) VALUES (?,?,?)";
         PreparedStatement preparedStatement = con.prepareStatement(query);
         preparedStatement.setInt(1, obj.getRouteId());
@@ -46,13 +46,13 @@ public class RouteRepository implements CrudInterface<Route> {
          OrderRepository orderRepository = new OrderRepository();
 
          while(resultSet.next()) {
-             deliveryOrder.add(orderRepository.get(resultSet.getInt("bestellingID")));
+             deliveryOrder.add(orderRepository.find(resultSet.getInt("bestellingID")));
          }
          return deliveryOrder;
      }
 
     @Override
-    public Route get(int id) throws SQLException {
+    public Route find(int id) throws SQLException {
         String query = "select * from route where routeID= ?";
         PreparedStatement preparedStatement = con.prepareStatement(query);
         preparedStatement.setInt(1, id);

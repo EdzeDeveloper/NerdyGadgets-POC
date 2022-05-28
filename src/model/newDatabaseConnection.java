@@ -5,7 +5,7 @@ public class newDatabaseConnection {
 
     public static Connection createConnection() throws SQLException {
         try {
-            return DriverManager.getConnection("jdbc:mysql://localhost:3306/nerdygadgets?allowMultiQueries=true", "root" , "");
+            return DriverManager.getConnection("jdbc:mysql://localhost:3306/nerdygadgetsfinal?allowMultiQueries=true", "root" , "");
         }
         catch (Exception exception) {
             exception.printStackTrace();

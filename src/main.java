@@ -27,8 +27,10 @@ public class main {
     startTime = System.nanoTime();
     newDatabaseConnection.insertUpdateDelete("SET foreign_key_checks = 0; TRUNCATE TABLE route; TRUNCATE TABLE bestellingenlijst;");
     RouteRepository routeRepository = new RouteRepository();
+
     Route route = new Route(1);
-    routeRepository.add(route);
+    
+    routeRepository.create(route);
     ArrayList<Order> deliveryOrder = route.nearestNeighbor();
     routeRepository.Update(route);
     routeRepository.addDeliveryOrder(deliveryOrder, route.getRouteId());

@@ -10,7 +10,7 @@ public class EdgeRepository implements CrudInterface<Edge> {
     private Connection con = DBConnection.getConnection();
 
     @Override
-    public void add(Edge obj) throws SQLException {
+    public void create(Edge obj) throws SQLException {
         String query = "INSERT INTO edge (edgeID, startNodeID, targetNodeID, cost) VALUES (?,?,?,?)";
         PreparedStatement preparedStatement = con.prepareStatement(query);
         preparedStatement.setInt(1, obj.getEdgeID());
@@ -31,7 +31,7 @@ public class EdgeRepository implements CrudInterface<Edge> {
     }
 
     @Override
-    public Edge get(int id) throws SQLException {
+    public Edge find(int id) throws SQLException {
         String query = "select * from edge where edgeID= ?";
         PreparedStatement preparedStatement = con.prepareStatement(query);
         preparedStatement.setInt(1, id);
@@ -69,7 +69,7 @@ public class EdgeRepository implements CrudInterface<Edge> {
 
 
         while(resultSet.next()) {
-            edgeList.add(get(resultSet.getInt("edgeID")));
+            edgeList.add(find(resultSet.getInt("edgeID")));
         }
         return edgeList;
     }
@@ -85,7 +85,7 @@ public class EdgeRepository implements CrudInterface<Edge> {
 
 
         while(resultSet.next()) {
-            edgesConnectedToNode.add(get(resultSet.getInt("edgeID")));
+            edgesConnectedToNode.add(find(resultSet.getInt("edgeID")));
         }
         return edgesConnectedToNode;
     }
@@ -103,7 +103,7 @@ public class EdgeRepository implements CrudInterface<Edge> {
 
 
         while(resultSet.next()) {
-            edgesConnectedToNode = get(resultSet.getInt("edgeID"));
+            edgesConnectedToNode = find(resultSet.getInt("edgeID"));
         }
         return edgesConnectedToNode;
     }

@@ -61,7 +61,7 @@ public class Route {
     // Add the first node to the list
 //    deliveryOrder.add(nodeList.get(0));
     // Add NerdyGadgets warehouse as first and last node
-    Order nerdyGadgetsWarehouse = orderRepository.get(-1);
+    Order nerdyGadgetsWarehouse = orderRepository.find(-1);
     deliveryOrder.add(0, nerdyGadgetsWarehouse);
 
     // Compile a list of all edges connected to the current node
@@ -102,7 +102,7 @@ public class Route {
           }
 
           if (!nodeIsInDeliveryOrder) {
-            nextNode = orderRepository.get(nextNodeTemp);
+            nextNode = orderRepository.find(nextNodeTemp);
             lowestCostEdgeCost = cost;
           }
 
@@ -115,7 +115,7 @@ public class Route {
       deliveryOrder.add(nextNode);
     }
 
-    Order nerdyGadgetsWarehouse2 = orderRepository.get(-2);
+    Order nerdyGadgetsWarehouse2 = orderRepository.find(-2);
     Edge finalEdge = edgeRepository.getEdgeConnectingTwoNodes(deliveryOrder.get(deliveryOrder.size() -1) , nerdyGadgetsWarehouse2);
     deliveryOrder.add(nerdyGadgetsWarehouse2);
     aantalkm += finalEdge.getCost();
