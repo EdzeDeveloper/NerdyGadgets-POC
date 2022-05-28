@@ -26,7 +26,7 @@ public class ReturnOrderListController {
 		
 		//haal alle geretourneerde orders op
 		ReturnRepository returnRepo = new ReturnRepository();
-		ResultSet returnOrdersResultSet  = returnRepo.getAll();
+		ResultSet returnOrdersResultSet  = returnRepo.findAll();
 		while (returnOrdersResultSet.next()) {
 			Return returnInstance = new Return();
 			returnInstance.setBestellingID(returnOrdersResultSet.getInt("bestellingID"));
