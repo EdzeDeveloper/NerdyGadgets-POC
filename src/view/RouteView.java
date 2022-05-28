@@ -1,11 +1,15 @@
 package view;
 
 import java.awt.Color;
-// import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.awt.*;    
 import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+
+import model.Order;
+import repository.AdresRepository;
 
 public class RouteView extends JPanel{
 	private JPanel routeView;
@@ -15,6 +19,8 @@ public class RouteView extends JPanel{
   private JLabel aantalBestellingenLabel;
   private JTextField aantalBestellingenTextField;
   private JButton calculateRouteButton;
+  private DefaultTableModel routeDefaultTableModel;
+  private JTable routJTable;
 
 	public RouteView() {
 		// new panels
@@ -31,11 +37,11 @@ public class RouteView extends JPanel{
 		//set layout
 		routeView.setLayout(new BoxLayout(routeView, BoxLayout.X_AXIS));
 	
-		// //create table beforehand
-		// String colums[]={"ProductID","Naam","Prijs"};    
-		// tableModel = new DefaultTableModel(colums, 0);
-		// table = new JTable(tableModel);
-		// add(new JScrollPane(table));
+		//create table beforehand
+		String colums[]={"BestellingID","Adres"};    
+		routeDefaultTableModel = new DefaultTableModel(colums, 0);
+		routJTable = new JTable(routeDefaultTableModel);
+		add(new JScrollPane(routJTable));
 
 		// new splitpane
 		splitPane = new JSplitPane();
@@ -62,26 +68,6 @@ public class RouteView extends JPanel{
 		calculateRouteButton.addActionListener(actionListener);
 	}
 
-	// public void createResultView(Order bestelling) {
-	// 	JLabel bestellingID = new JLabel("RetourID = " + Integer.toString(bestelling.getBestellingID()));
-	// 	resultViewPanel.add(bestellingID);
-
-	// 	for (int i = 0; i < bestelling.getBesteldeProducten().size(); i++)   
-	// 	{
-	// 		// insert data into tableModel as rows
-	// 		Object[] data = {bestelling.getBesteldeProducten().get(i).getProductID(), bestelling.getBesteldeProducten().get(i).getProductNaam(), bestelling.getBesteldeProducten().get(i).getPrijs()};
-	// 		tableModel.addRow(data);
-	// 	}	
-	// 	resultViewPanel.add(table);
-	// 	resultViewPanel.add(accept);
-	// 	resultViewPanel.add(decline);
-	// 	resultViewPanel.add(retourNotRecieved);
-	// 	accept.setVisible(true);
-	// 	decline.setVisible(true);
-	// 	retourNotRecieved.setVisible(true);
-	// 	resultViewPanel.revalidate();
-	// }
-
 	// public void emptyResultViewPanel() {
 	// 	table.removeAll();
 	// 	tableModel.setRowCount(0);
@@ -105,6 +91,26 @@ public class RouteView extends JPanel{
   public int getAmountOfOrderNumber(){
 		return Integer.parseInt(aantalBestellingenTextField.getText());
 	}
+
+
+  public void createRouteList(ArrayList<Order> routeList) throws SQLException {
+    System.out.print(routeList);
+    JLabel ListTitle = new JLabel("Beste route op basis van Nearest Neighbor");
+		rightRouteView.add(ListTitle);
+    AdresRepository adresRepo = new AdresRepository();
+		for (int i = 0; i < routeList.size(); i++)   
+		{
+			// insert data into tableModel as rows
+			Object[] data = {routeList.get(i).getBestellingID(), adresRepo.find(routeList.get(i).getAdresID()).getStraatnaam() + " " + adresRepo.find(routeList.get(i).getAdresID()).getPostcode() + adresRepo.find(routeList.get(i).getAdresID()).getWoonplaats()};
+			routeDefaultTableModel.addRow(data);
+		}	
+    // add list to Right Jpanel
+		rightRouteView.add(routJTable);
+
+		// accept.setVisible(true);
+	
+		rightRouteView.revalidate();
+  }
 }
 
 

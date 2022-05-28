@@ -1,9 +1,6 @@
 import java.sql.SQLException;
-import java.util.ArrayList;
-
 import controller.MainController;
-import model.*;
-import repository.*;
+
 
 public class main {
   public static void main(String[] args) throws SQLException {
