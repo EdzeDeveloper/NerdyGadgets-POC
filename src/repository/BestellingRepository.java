@@ -22,7 +22,7 @@ public class BestellingRepository<T> implements CrudInterface<Bestelling>{
     }
 
     @Override
-    public Bestelling get(int id) throws SQLException {
+    public Bestelling find(int id) throws SQLException {
       String query
       = "select * from bestelling where bestellingID= ?";
       PreparedStatement preparedStatement
@@ -97,7 +97,7 @@ public class BestellingRepository<T> implements CrudInterface<Bestelling>{
       ResultSet resultSet = preparedStatement.executeQuery();
       // add product aan lijst van de bestelling
       while (resultSet.next()) {
-        besteldeProducten.add(ProductRepository.get(resultSet.getInt("productID")));
+        besteldeProducten.add(ProductRepository.find(resultSet.getInt("productID")));
       }
 
       return bestelling;

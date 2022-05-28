@@ -9,7 +9,7 @@ public interface CrudInterface<T>
     public void add(T obj)
     throws SQLException;
 
-    public T get(int id)
+    public T find(int id)
     throws SQLException;
     
     public ResultSet getAll()

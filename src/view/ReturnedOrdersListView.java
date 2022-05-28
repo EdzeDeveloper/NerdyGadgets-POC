@@ -3,17 +3,15 @@ package view;
 import java.awt.Color;
 import java.util.ArrayList;
 
-import javax.swing.BoxLayout;
-import javax.swing.DefaultListModel;
-import javax.swing.JButton;
-import javax.swing.JLabel;
-import javax.swing.JList;
-import javax.swing.JPanel;
-import javax.swing.JScrollPane;
+import java.awt.*;    
+import javax.swing.*;
+import javax.swing.event.ListSelectionListener;
+import javax.swing.table.DefaultTableModel;
+
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import javax.swing.JSplitPane;
 
+import model.Bestelling;
 import model.Product;
 import model.Return;
 
@@ -22,36 +20,49 @@ public class ReturnedOrdersListView extends JPanel{
 	private JPanel productPanel;
 	private JPanel retourOrdersPanel;
 	private JPanel resultViewPanel;
-  private JLabel returnLabel;
 	private JPanel productNameLabel;
 	private JSplitPane splitPane;
 	private int selectedBestellingID;
 	private JButton accept;
 	private JButton decline;
+	private JTable table;
+	private DefaultTableModel tableModel;
 
 	// setting all components to be used
 	public ReturnedOrdersListView() {
+		// new panels
 		retourOrdersPanel = new JPanel();
 		resultViewPanel = new JPanel();
-		retourOrdersPanel.setLayout(new BoxLayout(retourOrdersPanel, BoxLayout.X_AXIS));
-		resultViewPanel.setLayout(new BoxLayout(resultViewPanel, BoxLayout.Y_AXIS));
-		resultViewPanel.setBackground(Color.red);
+		resultViewPanel.setPreferredSize(new Dimension(350, 350));
+		resultViewPanel.setBorder(BorderFactory.createLineBorder(Color.pink));
 		productPanel = new JPanel();
 		productNameLabel = new JPanel();
 
-		returnLabel = new JLabel();
+		//set layout
+		retourOrdersPanel.setLayout(new BoxLayout(retourOrdersPanel, BoxLayout.X_AXIS));
+		resultViewPanel.setLayout(new BoxLayout(resultViewPanel, BoxLayout.Y_AXIS));
+	
+		//create table beforehand
+		String colums[]={"ProductID","Naam","Prijs"};    
+		tableModel = new DefaultTableModel(colums, 0);
+		table = new JTable(tableModel);
+		add(new JScrollPane(table));
+
+		// new splitpane
 		splitPane = new JSplitPane();
+
+		// new buttons and set them 
 		accept = new JButton("Accept");
 		decline = new JButton("Decline");
+		accept.setVisible(false);
+		decline.setVisible(false);
 	}
-
 
 	// wanneer een list binnen komt
 	public void setListModel(DefaultListModel<Return> defaultListmodel) {
 		returnList = new JList(defaultListmodel);
 
 		splitPane.setLeftComponent(new JScrollPane(returnList));
-		resultViewPanel.add(returnLabel);
 		splitPane.setRightComponent(resultViewPanel);
 
 		retourOrdersPanel.add(splitPane);
@@ -73,58 +84,46 @@ public class ReturnedOrdersListView extends JPanel{
 	public JList getReturnList() {
 		return returnList;
 	}
-	public JLabel getReturnListLabel() {
-		return returnLabel;
-	}
 	
 	public JButton getDecline() {
 		return decline;
 	}
 
-	public void addDecline() {
-		resultViewPanel.add(decline);
-	}
-	
 	public void addDeclineListener(ActionListener actionListener) {
 		decline.addActionListener(actionListener);
 		resultViewPanel.add(decline);
-	}
-
-	public JButton getAccept() {
-		return accept;
 	}
 
 	public void addAcceptListener(ActionListener actionListener) {
 		accept.addActionListener(actionListener);
 		resultViewPanel.add(accept);
 	}
-	public void addAccept() {
+
+	public void createResultView(Bestelling bestelling) {
+		JLabel bestellingID = new JLabel("BestellingID = " + Integer.toString(bestelling.getBestellingID()));
+		resultViewPanel.add(bestellingID);
+
+		for (int i = 0; i < bestelling.getBesteldeProducten().size(); i++)   
+		{
+			// insert data into tableModel as rows
+			Object[] data = {bestelling.getBesteldeProducten().get(i).getProductID(), bestelling.getBesteldeProducten().get(i).getProductNaam(), bestelling.getBesteldeProducten().get(i).getPrijs()};
+			tableModel.addRow(data);
+		}	
+		resultViewPanel.add(table);
 		resultViewPanel.add(accept);
+		resultViewPanel.add(decline);
+		resultViewPanel.revalidate();
 	}
 
+	public void emptyResultViewPanel() {
+		table.removeAll();
+		tableModel.setRowCount(0);
+		resultViewPanel.removeAll();
+		resultViewPanel.revalidate();
+	}
 
-	// public void setProductList(ArrayList<Product> productArrayList) {
-	// 	System.out.print("test");
-	// 	DefaultListModel<Product> DefaultListModelProducts = new DefaultListModel<>();
-	// 	productList = new JList(DefaultListModelProducts);
-	// 	productList.setBackground(Color.blue);
-
-	// 	splitPane.setLeftComponent(new JScrollPane(returnList));
-
-	// 	resultViewPanel.add(productList);
-	// 	resultViewPanel.revalidate();
-	// 	resultViewPanel.repaint();
-	// }
-
-	public void addLabels(ArrayList<Product> productArrayList) {
-	
-			productPanel.setName("test");
-		// for(int i = 0; i < productArrayList.size(); i++) {
-		// 	// productPanel =	new JPanel(productArrayList.get(i).getProductNaam());
-		// 	JLabel productName = new JLabel(productArrayList.get(i).getProductNaam());
-		// 	productPanel.add(productName);
-		// }
-		resultViewPanel.add(productPanel);
+	public void setReturnListListener(ListSelectionListener vieuwReturnedItemsEventListener) {
+		returnList.getSelectionModel().addListSelectionListener(vieuwReturnedItemsEventListener);
 	}
 }
 

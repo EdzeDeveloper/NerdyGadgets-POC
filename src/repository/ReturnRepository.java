@@ -17,7 +17,7 @@ public class ReturnRepository<T> implements CrudInterface<Return>{
     }
 
     @Override
-    public Return get(int id) throws SQLException {
+    public Return find(int id) throws SQLException {
       String query
       = "select * from retour where retourID= ?";
       PreparedStatement preparedStatement

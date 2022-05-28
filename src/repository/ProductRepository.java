@@ -18,7 +18,7 @@ public class ProductRepository<T> implements CrudInterface<Product>{
     }
 
     @Override
-    public Product get(int id) throws SQLException {
+    public Product find(int id) throws SQLException {
       String query
       = "select * from product where productID= ?";
       PreparedStatement preparedStatement

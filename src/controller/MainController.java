@@ -5,6 +5,7 @@ import javax.swing.JMenuItem;
 import javax.swing.JPanel;
 
 import java.awt.CardLayout;
+import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
@@ -31,17 +32,15 @@ public class MainController {
   //initialize views
   JPanel panelController = new JPanel();
   JPanel returnOrderListViewJpanel;
-  JPanel panelSecond = new JPanel();
-  JPanel routeView = new JPanel();
+  JPanel panelSecond;
+  JPanel routeView;
   CardLayout cardLayout = new CardLayout();
   
   public MainController() throws SQLException {
     mainFrame = new JFrame("NerdyGadgets");
+    // set the views
+    initializeViews();
    
-    panelController.setLayout(cardLayout);
-
-    //initialize return order list view
-    returnOrderListView = new ReturnedOrdersListView();
     
     returnOrderListController = new ReturnOrderListController(returnOrderListView, mainFrame);
     returnOrderListViewJpanel = returnOrderListView.getListPanel();
@@ -81,6 +80,21 @@ public class MainController {
         cardLayout.show(panelController, "viewRoute");
       }
     }
+
+    
+  }
+  public void resetViews(Component comp) {
+      panelController.remove(comp);
+      panelController.revalidate();
+      panelController.repaint();
+  }
+
+  public void initializeViews() {
+    panelController.setLayout(cardLayout);
+    returnOrderListView = new ReturnedOrdersListView();
+    returnOrderListViewJpanel = new ReturnedOrdersListView();
+    panelSecond = new JPanel();
+    routeView = new JPanel();
   }
 }
 

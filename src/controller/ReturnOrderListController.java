@@ -5,6 +5,8 @@ import javax.swing.DefaultListModel;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JList;
+import javax.swing.event.ListSelectionEvent;
+import javax.swing.event.ListSelectionListener;
 
 import model.Bestelling;
 import model.Return;
@@ -15,6 +17,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 public class ReturnOrderListController {
   private ReturnedOrdersListView view;
+  private JList returnList;
+	private BestellingRepository<Bestelling> bestellingRepo;
+	
   
   public ReturnOrderListController(ReturnedOrdersListView returnOrderListView, JFrame mainframe) throws SQLException {
 		DefaultListModel<Return> DefaultListModelReturnedOrders = new DefaultListModel<>();
@@ -32,10 +37,9 @@ public class ReturnOrderListController {
     view = returnOrderListView;
 		view.setListModel(DefaultListModelReturnedOrders);	
 
-		JList returnList = view.getReturnList();
-		JLabel returnLabel = view.getReturnListLabel();
+		returnList = view.getReturnList();
 		// get bestellingen repository
-		BestellingRepository<Bestelling> bestellingRepo = new BestellingRepository();
+		bestellingRepo = new BestellingRepository();
 
 		
 		// set toekomstige button listeners voor het goed/afkeuren van producten
@@ -43,28 +47,7 @@ public class ReturnOrderListController {
 		view.addDeclineListener(new vieuwReturnedItemsEventListener());
 
 		//listener voor de geselecteerde item
-		returnList.getSelectionModel().addListSelectionListener(e -> {
-			Return R = (Return) returnList.getSelectedValue();
-			Bestelling geselecteerdeBestelling;
-			// probeer een bestelling met producten op te halen
-			try {
-				geselecteerdeBestelling = bestellingRepo.get(R.getRetourID());
-				view.addLabels(geselecteerdeBestelling.getBesteldeProducten());
-				returnLabel.setText("Bestelling ID: " + R.getBestellingID());
-
-				//voeg buttons toe aan de panel van de producten lijst.
-				view.addAccept();
-				view.addDecline();
-
-				// System.out.print(geselecteerdeBestelling);
-			} catch (SQLException e1) {
-				// TODO Auto-generated catch block
-				e1.printStackTrace();
-			}
-
-		});
-
-
+		view.setReturnListListener(new returnListListener());
   }
 	class vieuwReturnedItemsEventListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
@@ -72,5 +55,33 @@ public class ReturnOrderListController {
 		
 		}
 
+	}
+	// add listener to selected item
+	class returnListListener implements ListSelectionListener {
+
+		public void valueChanged (ListSelectionEvent e) {
+
+			
+			if (!e.getValueIsAdjusting()) {//This line prevents double events
+
+				Return R = (Return) returnList.getSelectedValue();
+				Bestelling geselecteerdeBestelling;
+				// probeer een bestelling met producten op te halen
+				try {
+					geselecteerdeBestelling = bestellingRepo.find(R.getRetourID());
+					view.emptyResultViewPanel();
+					// returnLabel.setText("Bestelling ID: " + R.getBestellingID());
+					view.createResultView(geselecteerdeBestelling);
+
+
+					//inistiate product information panel info.
+
+					// System.out.print(geselecteerdeBestelling);
+				} catch (SQLException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+				}
+			}
+		}
 	}
 }
