@@ -80,17 +80,17 @@ public class MainController {
 
   class addMenuItemListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
-      if(e.getSource()==returnProductsViewMenuItem) {
-        cardLayout.show(panelController, "returnProducts");
-      if(e.getSource()==returnedOrderListProductsViewMenuItem) {
-        cardLayout.show(panelController, "returnOrderList");
-      }
-      if(e.getSource()==routeViewMenuItem) {
-        cardLayout.show(panelController, "viewRoute");
-      }
+        if(e.getSource()==returnProductsViewMenuItem) {
+          cardLayout.show(panelController, "returnProducts");
+        }
+        if(e.getSource()==returnedOrderListProductsViewMenuItem) {
+          cardLayout.show(panelController, "returnOrderList");
+        }
+        if(e.getSource()==routeViewMenuItem) {
+          cardLayout.show(panelController, "viewRoute");
+        }
       }
     }
-  }
 
   public void resetViews(Component comp) {
       panelController.remove(comp);
