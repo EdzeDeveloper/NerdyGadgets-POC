@@ -10,7 +10,7 @@ public class main {
 
     new MainController();
 
-    int numberOfNodes = 50;
+    int numberOfNodes = 10;
 
     System.out.println("Creating graph...");
     long startTime = System.nanoTime();

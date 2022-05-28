@@ -32,6 +32,10 @@ public class OrderRepository<T> implements CrudInterface<Order> {
         while (resultSet.next()) {
             order.setBestellingID(resultSet.getInt("bestellingID"));
             order.setPersoonID(resultSet.getInt("persoonID"));
+            order.setStatus(resultSet.getString("status"));
+            order.setBestelDatum(resultSet.getDate("besteldatum"));
+            order.setLeverDatum(resultSet.getDate("leverdatum"));
+            order.setLeverAdresId(resultSet.getInt("leverAdresId"));
         }
 
         return order;
@@ -140,20 +144,6 @@ public class OrderRepository<T> implements CrudInterface<Order> {
     }
 
     public ResultSet findAll() throws SQLException {
-        // // TODO Auto-generated method stubString query = "select * from Return";
-        // PreparedStatement ps
-        //     = con.prepareStatement(query);
-        // ResultSet rs = ps.executeQuery();
-        // List<Return> ls = new ArrayList();
-
-        // while (rs.next()) {
-        //     Return emp = new Return();
-        //     // emp.setEmp_id(rs.getInt("emp_id"));
-        //     // emp.setEmp_name(rs.getString("emp_name"));
-        //     // emp.setEmp_address(rs.getString("emp_address"));
-        //     ls.add(emp);
-        // }
-        // return ls;
         return null;
     }
 
