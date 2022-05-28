@@ -60,8 +60,8 @@ public class MainController {
     routeView.setBackground(Color.YELLOW);
     
     // add all panels to the panel controller
-    panelController.add(returnOrderListViewJpanel, "returnOrderList");
     panelController.add(returnProductsView, "returnProducts");
+    panelController.add(returnOrderListViewJpanel, "returnOrderList");
     panelController.add(routeView, "viewRoute");
 
     // get main menu with button listeners
@@ -70,7 +70,6 @@ public class MainController {
     returnedOrderListProductsViewMenuItem = mainMenu.getReturnedOrderListProductsViewMenuItem();
     returnProductsViewMenuItem = mainMenu.getReturnProductsViewMenuItem();
     routeViewMenuItem = mainMenu.getRouteViewMenuItem();
-    //show first panel.
 
     mainFrame.add(panelController);
     mainFrame.pack();
@@ -82,7 +81,6 @@ public class MainController {
   class addMenuItemListener implements ActionListener{
 		public void actionPerformed(ActionEvent e) {
       if(e.getSource()==returnProductsViewMenuItem) {
-        System.out.println("*beep boop* je wilt naar de product retourneer pagina");
         cardLayout.show(panelController, "returnProducts");
       if(e.getSource()==returnedOrderListProductsViewMenuItem) {
         cardLayout.show(panelController, "returnOrderList");

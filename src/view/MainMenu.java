@@ -17,15 +17,15 @@ public class MainMenu extends JFrame{
   public MainMenu (JFrame frame) {
 		menuBar = new JMenuBar();
 
-		ImageIcon returnIcon = new ImageIcon("../test.png");
-
+		// menu item
 		productMenu = new JMenu("Product");
-	  	returnProductsViewMenuItem = new JMenuItem("Retour aanmelden");
+		// items in menu
+		returnProductsViewMenuItem = new JMenuItem("Retour aanmelden");
 		returnedOrderListProductsviewMenuItem = new JMenuItem("Bekijk geretourneerde producten");
 		routeViewMenuItem = new JMenuItem("Ga naar route");
 
-	  	productMenu.add(returnProductsViewMenuItem);
-	  	productMenu.add(returnedOrderListProductsviewMenuItem);
+		productMenu.add(returnProductsViewMenuItem);
+		productMenu.add(returnedOrderListProductsviewMenuItem);
 		productMenu.add(routeViewMenuItem);
 
 		menuBar.add(productMenu);
