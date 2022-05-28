@@ -14,6 +14,10 @@ public class ReturnProductsView extends JPanel{
 
 	private Order order = new Order();
 
+	private JPanel returnPanel;
+	private JPanel productsGridPanel;
+
+	private JLabel productsLabel;
 	private JLabel textLabel = new JLabel("Ordernummer:");
 	private JTextField orderNumber  = new JTextField(10);
 	private JButton searchButton = new JButton("Zoek bestelde producten");
@@ -27,8 +31,12 @@ public class ReturnProductsView extends JPanel{
 	public ReturnProductsView(){
 		
 		// Sets up the view and adds the components
+
+		productsGridPanel = new JPanel();
+		productsLabel = new JLabel("Geef aantal producten aan");
+
 		
-		JPanel returnPanel = new JPanel();
+		returnPanel = new JPanel();
 		returnPanel.setLayout(new BoxLayout(returnPanel, BoxLayout.X_AXIS));
 
 		returnPanel.add(textLabel);
@@ -55,16 +63,17 @@ public class ReturnProductsView extends JPanel{
 	}
 
 	public void setOrder(Order order) {
+		
 		this.order = order;
 
-		JPanel productsGridPanel = new JPanel();
 		productsGridPanel.setLayout(new BoxLayout(productsGridPanel, BoxLayout.Y_AXIS));
 
-		JLabel productsLabel = new JLabel("Geef aantal producten aan");
 		productsLabel.setFont(productsLabel.getFont().deriveFont(Font.BOLD, 14f));
 
 		productsGridPanel.add(productsLabel);
 		productsGridPanel.add(Box.createVerticalStrut(20));
+
+		emptyReturnPanel();
 
 		// With 2 columns for label and input.
 		for (Product p : order.getBesteldeProducten()) {
@@ -85,6 +94,11 @@ public class ReturnProductsView extends JPanel{
 		nextButton.setVisible(true);
 
 		repaint();
+	}
+
+	public void emptyReturnPanel() {
+		productsGridPanel.removeAll();
+		returnPanel.revalidate();
 	}
 
 	

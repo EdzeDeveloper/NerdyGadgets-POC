@@ -59,6 +59,9 @@ public class ReturnProductsController {
 			// wanneer je het ordernummer hebt, haal de order op uit de database.
 			Order order = orderRepository.find(orderNumber, true);
 
+			// empty panel voordat het gebruikt wordt 
+
+			returnProductsView.emptyReturnPanel();
 			//haal het resultaat op door de getCalculationValue functie.
 			returnProductsView.setOrder(order);
 		}

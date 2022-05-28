@@ -82,9 +82,11 @@ public class MainController {
 		public void actionPerformed(ActionEvent e) {
         if(e.getSource()==returnProductsViewMenuItem) {
           cardLayout.show(panelController, "returnProducts");
+          returnOrderListView.emptyResultViewPanel();
         }
         if(e.getSource()==returnedOrderListProductsViewMenuItem) {
           cardLayout.show(panelController, "returnOrderList");
+          returnProductsView.emptyReturnPanel();
         }
         if(e.getSource()==routeViewMenuItem) {
           cardLayout.show(panelController, "viewRoute");
