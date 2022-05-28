@@ -19,6 +19,7 @@ public class ReturnOrderListController {
   private ReturnedOrdersListView view;
   private JList returnList;
 	private BestellingRepository<Bestelling> bestellingRepo;
+	private Bestelling geselecteerdeBestelling;
 	
   
   public ReturnOrderListController(ReturnedOrdersListView returnOrderListView, JFrame mainframe) throws SQLException {
@@ -51,8 +52,12 @@ public class ReturnOrderListController {
   }
 	class vieuwReturnedItemsEventListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			System.out.print(e.getActionCommand());
-		
+			if(e.getActionCommand() == "Accept") {
+				System.out.print("ik wil wat accepteren");
+			}
+			if(e.getActionCommand() == "Decline") {
+				System.out.print("ik wil wat Decline");
+			}
 		}
 
 	}
@@ -65,14 +70,12 @@ public class ReturnOrderListController {
 			if (!e.getValueIsAdjusting()) {//This line prevents double events
 
 				Return R = (Return) returnList.getSelectedValue();
-				Bestelling geselecteerdeBestelling;
 				// probeer een bestelling met producten op te halen
 				try {
 					geselecteerdeBestelling = bestellingRepo.find(R.getRetourID());
 					view.emptyResultViewPanel();
 					// returnLabel.setText("Bestelling ID: " + R.getBestellingID());
 					view.createResultView(geselecteerdeBestelling);
-
 
 					//inistiate product information panel info.
 

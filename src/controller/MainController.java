@@ -82,13 +82,19 @@ public class MainController {
 		public void actionPerformed(ActionEvent e) {
         if(e.getSource()==returnProductsViewMenuItem) {
           cardLayout.show(panelController, "returnProducts");
+          // empty views when switching
           returnOrderListView.emptyResultViewPanel();
         }
         if(e.getSource()==returnedOrderListProductsViewMenuItem) {
           cardLayout.show(panelController, "returnOrderList");
+          // empty views when switching
+          returnProductsView.emptyReturnPanel();
         }
         if(e.getSource()==routeViewMenuItem) {
           cardLayout.show(panelController, "viewRoute");
+          // empty views when switching
+          returnProductsView.emptyReturnPanel();
+          returnOrderListView.emptyResultViewPanel();
         }
       }
     }

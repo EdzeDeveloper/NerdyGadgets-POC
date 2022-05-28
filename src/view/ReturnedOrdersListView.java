@@ -113,12 +113,16 @@ public class ReturnedOrdersListView extends JPanel{
 		resultViewPanel.add(table);
 		resultViewPanel.add(accept);
 		resultViewPanel.add(decline);
+		accept.setVisible(true);
+		decline.setVisible(true);
 		resultViewPanel.revalidate();
 	}
 
 	public void emptyResultViewPanel() {
 		table.removeAll();
 		tableModel.setRowCount(0);
+		accept.setVisible(false);
+		decline.setVisible(false);
 		resultViewPanel.removeAll();
 		resultViewPanel.revalidate();
 	}
