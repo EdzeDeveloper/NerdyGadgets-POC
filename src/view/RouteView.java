@@ -138,6 +138,7 @@ public class RouteView extends JPanel{
 
 	public void create2optList(ArrayList calculateRouteNearestNeigbor, Route route) throws SQLException {
 		JLabel aantalKMJLabel = new JLabel("Completed 2-Opt, route is: " + Math.round(route.getAantalkm()/1000) + " km");
+		routeListFor2Opt = calculateRouteNearestNeigbor;
     AdresRepository adresRepo = new AdresRepository();
 		for (int i = 0; i < routeListFor2Opt.size(); i++)   
 		{
