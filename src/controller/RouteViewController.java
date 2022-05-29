@@ -32,7 +32,7 @@ public class RouteViewController {
         try {
           JTextField TextFieldAmountOfOrderNumbers = routeView.getAmountOfOrderNumber();
           if(TextFieldAmountOfOrderNumbers.getText().isEmpty()){
-            routeView.displayErrorMessage("Vul aantal besteellingen in.");
+            routeView.displayErrorMessage("Vul aantal bestellingen in.");
           } else if(Integer.parseInt(TextFieldAmountOfOrderNumbers.getText()) == 0) {
             routeView.displayErrorMessage("Aantal bestellingen voor de route kan niet 0 zijn.");
           } else {
@@ -91,31 +91,27 @@ public class RouteViewController {
 
     public ArrayList calculateRoute2opt(ArrayList<Order> neirestNeighborOrders) throws SQLException {
       System.out.println("Applying 2-opt...");
-        for (int i = 1; i < 4; i++) {
-          RouteRepository routeRepository = new RouteRepository();
+      RouteRepository routeRepository = new RouteRepository();
 
-          //set time variables
-          long startTime = System.nanoTime();
-          long endTime = System.nanoTime();
-          long duration = (endTime - startTime)/1000000000;
+      //set time variables
+      long startTime = System.nanoTime();
+      long endTime = System.nanoTime();
+      long duration = (endTime - startTime)/1000000000;
 
 
-          startTime = System.nanoTime();
-          double currentAantalkm = route.getAantalkm();
-          neirestNeighborOrders = route.twoOpt();
-          routeRepository.update(route);
-          routeRepository.updateDeliveryOrder(neirestNeighborOrders, route.getRouteId());
-          double newAantalkm = route.getAantalkm();
-          endTime = System.nanoTime();
-          duration = (endTime - startTime)/1000000000;
-          if (newAantalkm == currentAantalkm) {
-            System.out.println("2-opt found the best route in " + (i - 1) + " itterations " + Math.round(newAantalkm/1000) + " km");
-            break;
-          }
-          System.out.println("Completed 2-opt iteration " + i + " in " + duration + " seconds. " + Math.round(route.getAantalkm()/1000) + " km");
-        }
+      startTime = System.nanoTime();
+      double currentAantalkm = route.getAantalkm();
+      neirestNeighborOrders = route.twoOpt();
+      routeRepository.update(route);
+      routeRepository.updateDeliveryOrder(neirestNeighborOrders, route.getRouteId());
+      double newAantalkm = route.getAantalkm();
+      endTime = System.nanoTime();
+      duration = (endTime - startTime)/1000000000;
+      if (newAantalkm == currentAantalkm) {
+        System.out.println("2-opt found the best route " + Math.round(newAantalkm/1000) + " km");
+      }
+      System.out.println("Completed 2-opt iteration " + duration + " seconds. " + Math.round(route.getAantalkm()/1000) + " km");
       return neirestNeighborOrders;
-
     }
 	}
 }
