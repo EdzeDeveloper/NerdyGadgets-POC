@@ -28,6 +28,7 @@ public class RouteViewController {
           routeView.createRouteList(calculateRoute(routeView.getAmountOfOrderNumber()));
         } catch (SQLException e1) {
           // TODO Auto-generated catch block
+          routeView.displayErrorMessage("Er is wat mis gegaan met het berekenen van de route");
           e1.printStackTrace();
         }
       }
@@ -38,12 +39,7 @@ public class RouteViewController {
       DatabaseActions databaseActions = new DatabaseActions();
       System.out.println("Creating graph...");
       long startTime = System.nanoTime();
-      databaseActions.emptyGraphFromDatabase("SET foreign_key_checks = 0, TRUNCATE TABLE graph;");
-      databaseActions.emptyGraphFromDatabase("SET foreign_key_checks = 0, TRUNCATE TABLE graphnodes;");
-      databaseActions.emptyGraphFromDatabase("SET foreign_key_checks = 0, TRUNCATE TABLE graphedges;");
-      databaseActions.emptyGraphFromDatabase("SET foreign_key_checks = 0, TRUNCATE TABLE edge;");
-      databaseActions.emptyGraphFromDatabase("SET foreign_key_checks = 0, TRUNCATE TABLE route;");
-      databaseActions.emptyGraphFromDatabase("SET foreign_key_checks = 0, TRUNCATE TABLE bestellingenlijst;");
+      databaseActions.emptyGraphFromDatabase("SET foreign_key_checks = 0; TRUNCATE TABLE graph; TRUNCATE TABLE graphnodes; TRUNCATE TABLE graphedges; TRUNCATE TABLE edge; TRUNCATE TABLE route; TRUNCATE TABLE bestellingenlijst;");
       Graph graph = new Graph(1);
       graph.createGraph(numberOfNodes);
       long endTime = System.nanoTime();

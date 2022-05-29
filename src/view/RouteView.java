@@ -36,12 +36,13 @@ public class RouteView extends JPanel{
 
 		//set layout
 		routeView.setLayout(new BoxLayout(routeView, BoxLayout.X_AXIS));
+		rightRouteView.setLayout(new BoxLayout(rightRouteView, BoxLayout.Y_AXIS));
 	
 		//create table beforehand
 		String colums[]={"BestellingID","Adres"};    
 		routeDefaultTableModel = new DefaultTableModel(colums, 0);
 		routJTable = new JTable(routeDefaultTableModel);
-		add(new JScrollPane(routJTable));
+		
 
 		// new splitpane
 		splitPane = new JSplitPane();
@@ -68,15 +69,18 @@ public class RouteView extends JPanel{
 		calculateRouteButton.addActionListener(actionListener);
 	}
 
-	// public void emptyResultViewPanel() {
-	// 	table.removeAll();
-	// 	tableModel.setRowCount(0);
-	// 	accept.setVisible(false);
-	// 	decline.setVisible(false);
-	// 	retourNotRecieved.setVisible(false);
-	// 	resultViewPanel.removeAll();
-	// 	resultViewPanel.revalidate();
-	// }
+	public void emptyResult() {
+		resetTable();
+		rightRouteView.removeAll();
+		routeView.revalidate();
+	}
+	public void resetTable() {
+		routJTable.removeAll();
+		routeDefaultTableModel.setRowCount(0);
+		rightRouteView.removeAll();
+		rightRouteView.revalidate();
+		routeView.revalidate();
+	}
 
 	public void displayErrorMessage(String errorMessage){
 		
@@ -94,18 +98,18 @@ public class RouteView extends JPanel{
 
 
   public void createRouteList(ArrayList<Order> routeList) throws SQLException {
-    System.out.print(routeList);
-    JLabel ListTitle = new JLabel("Beste route op basis van Nearest Neighbor");
-		rightRouteView.add(ListTitle);
+		resetTable();
+		JLabel JLabelListTitle = new JLabel("Beste route op basis van Nearest Neighbor");
     AdresRepository adresRepo = new AdresRepository();
 		for (int i = 0; i < routeList.size(); i++)   
 		{
 			// insert data into tableModel as rows
-			Object[] data = {routeList.get(i).getBestellingID(), adresRepo.find(routeList.get(i).getAdresID()).getStraatnaam() + " " + adresRepo.find(routeList.get(i).getAdresID()).getPostcode() + adresRepo.find(routeList.get(i).getAdresID()).getWoonplaats()};
+			Object[] data = {routeList.get(i).getBestellingID(), adresRepo.find(routeList.get(i).getAdresID()).getStraatnaam() + "   " + adresRepo.find(routeList.get(i).getAdresID()).getPostcode() + "   " + adresRepo.find(routeList.get(i).getAdresID()).getWoonplaats()};
 			routeDefaultTableModel.addRow(data);
 		}	
     // add list to Right Jpanel
-		rightRouteView.add(routJTable);
+		rightRouteView.add(JLabelListTitle);
+		rightRouteView.add(new JScrollPane(routJTable));
 
 		// accept.setVisible(true);
 	

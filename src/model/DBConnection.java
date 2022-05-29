@@ -9,7 +9,7 @@ public class DBConnection {
   private static Connection con = null;
 
   static {
-    String url = "jdbc:mysql://localhost:3306/nerdygadgetsfinal";
+    String url = "jdbc:mysql://localhost:3306/nerdygadgetsfinal?allowMultiQueries=true";
     String user = "root";
     String pass = "";
     try {

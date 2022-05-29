@@ -79,11 +79,13 @@ public class MainController {
           cardLayout.show(panelController, "returnProducts");
           // empty views when switching
           returnOrderListView.emptyResultViewPanel();
+          routeView.emptyResult();
         }
         if(e.getSource()==returnedOrderListProductsViewMenuItem) {
           cardLayout.show(panelController, "returnOrderList");
           // empty views when switching
           returnProductsView.emptyReturnPanel();
+          routeView.emptyResult();
         }
         if(e.getSource()==routeViewMenuItem) {
           cardLayout.show(panelController, "viewRoute");

@@ -43,7 +43,6 @@ public class ReturnedOrdersListView extends JPanel{
 		String colums[]={"ProductID","Naam","Prijs"};    
 		tableModel = new DefaultTableModel(colums, 0);
 		table = new JTable(tableModel);
-		add(new JScrollPane(table));
 
 		// new splitpane
 		splitPane = new JSplitPane();
@@ -100,6 +99,8 @@ public class ReturnedOrdersListView extends JPanel{
 	public void createResultView(Order bestelling) {
 		JLabel bestellingID = new JLabel("RetourID = " + Integer.toString(bestelling.getBestellingID()));
 		resultViewPanel.add(bestellingID);
+		JPanel buttonLayout = new JPanel();
+		buttonLayout.setLayout(new BoxLayout(buttonLayout, BoxLayout.X_AXIS));
 
 		for (int i = 0; i < bestelling.getBesteldeProducten().size(); i++)   
 		{
@@ -107,10 +108,11 @@ public class ReturnedOrdersListView extends JPanel{
 			Object[] data = {bestelling.getBesteldeProducten().get(i).getProductID(), bestelling.getBesteldeProducten().get(i).getProductNaam(), bestelling.getBesteldeProducten().get(i).getPrijs()};
 			tableModel.addRow(data);
 		}	
-		resultViewPanel.add(table);
-		resultViewPanel.add(accept);
-		resultViewPanel.add(decline);
-		resultViewPanel.add(retourNotRecieved);
+		resultViewPanel.add(new JScrollPane(table));
+		buttonLayout.add(accept);
+		buttonLayout.add(decline);
+		buttonLayout.add(retourNotRecieved);
+		resultViewPanel.add(buttonLayout);
 		accept.setVisible(true);
 		decline.setVisible(true);
 		retourNotRecieved.setVisible(true);
