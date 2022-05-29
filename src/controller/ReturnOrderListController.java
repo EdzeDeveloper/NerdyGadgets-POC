@@ -76,6 +76,7 @@ public class ReturnOrderListController {
 						selectedOrder.setStatusToReturnRecieved();
 						bestellingRepo.update(selectedOrder);
 						returnRepo.delete(currentSelectedRetourId);
+						resetAndGetNewList();
 						view.displayErrorMessage("Product status is gewijzigd naar : Retour ontvangen");
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
@@ -88,8 +89,9 @@ public class ReturnOrderListController {
 				try {
 					selectedOrder.setStatusToReturnDeclined();
 					bestellingRepo.update(selectedOrder);
-					view.displayErrorMessage("Product status is gewijzigd naar : afgewezen");
 					returnRepo.delete(currentSelectedRetourId);
+					view.displayErrorMessage("Product status is gewijzigd naar : afgewezen");
+					resetAndGetNewList();
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					view.displayErrorMessage("Er is iets mis gegaan met het aanpassen van de status van de order.");
@@ -100,8 +102,9 @@ public class ReturnOrderListController {
 				try {
 					selectedOrder.setStatusToReturnNOTRecieved();
 					bestellingRepo.update(selectedOrder);
-					view.displayErrorMessage("Product status is gewijzigd naar : niet aangekomen");
 					returnRepo.delete(currentSelectedRetourId);
+					view.displayErrorMessage("Product status is gewijzigd naar : niet aangekomen");
+					resetAndGetNewList();
 				} catch (SQLException e1) {
 					// TODO Auto-generated catch block
 					view.displayErrorMessage("Er is iets mis gegaan met het aanpassen van de status van de order.");
