@@ -84,6 +84,12 @@ public class MainController {
         }
         if(e.getSource()==returnedOrderListProductsViewMenuItem) {
           cardLayout.show(panelController, "returnOrderList");
+          try {
+            returnOrderListController.resetAndGetNewList();
+          } catch (SQLException e1) {
+            // TODO Auto-generated catch block
+            e1.printStackTrace();
+          }
           // empty views when switching
           returnProductsView.emptyReturnPanel();
           routeView.emptyResult();

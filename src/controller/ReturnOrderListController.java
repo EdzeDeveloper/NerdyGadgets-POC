@@ -24,22 +24,16 @@ public class ReturnOrderListController {
 	private ReturnRepository returnRepo;
 	private Return geselecteerdeRetour;
 	private int currentSelectedRetourId = 0;
+	private DefaultListModel<Return> DefaultListModelReturnedOrders;
 	
   
   public ReturnOrderListController(ReturnedOrdersListView returnOrderListView, JFrame mainframe) throws SQLException {
-		DefaultListModel<Return> DefaultListModelReturnedOrders = new DefaultListModel<>();
+		DefaultListModelReturnedOrders = new DefaultListModel();
 		
 		//haal alle geretourneerde orders op
 		returnRepo = new ReturnRepository();
 		productRepo = new ProductRepository();
-		ResultSet returnOrdersResultSet  = returnRepo.findAll();
-		while (returnOrdersResultSet.next()) {
-			Return returnInstance = new Return();
-			returnInstance.setBestellingID(returnOrdersResultSet.getInt("bestellingID"));
-			returnInstance.setReden(returnOrdersResultSet.getString("reden"));
-			returnInstance.setRetourID(returnOrdersResultSet.getInt("retourID"));
-			DefaultListModelReturnedOrders.addElement(returnInstance);
-		}
+		getDefaultListModel();
     view = returnOrderListView;
 		view.setListModel(DefaultListModelReturnedOrders);	
 
@@ -56,9 +50,19 @@ public class ReturnOrderListController {
 		//listener voor de geselecteerde item
 		view.setReturnListListener(new returnListListener());
   }
+
+	private void getDefaultListModel() throws SQLException {
+		ResultSet returnOrdersResultSet  = returnRepo.findAll();
+		while (returnOrdersResultSet.next()) {
+			Return returnInstance = new Return();
+			returnInstance.setBestellingID(returnOrdersResultSet.getInt("bestellingID"));
+			returnInstance.setReden(returnOrdersResultSet.getString("reden"));
+			returnInstance.setRetourID(returnOrdersResultSet.getInt("retourID"));
+			DefaultListModelReturnedOrders.addElement(returnInstance);
+		}
+	}
 	class vieuwReturnedItemsEventListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
-			System.out.print(e.getActionCommand());
 			Order selectedOrder = null;
 			try {
 				selectedOrder = bestellingRepo.find(geselecteerdeRetour.getBestellingID());
@@ -139,5 +143,11 @@ public class ReturnOrderListController {
 
 	public void resetList() {
 		returnList.clearSelection();
+	}
+
+	public void resetAndGetNewList() throws SQLException {
+		DefaultListModelReturnedOrders.removeAllElements();
+		getDefaultListModel();
+		view.revalidate();
 	}
 }
