@@ -55,7 +55,6 @@ public class RouteViewController {
           e1.printStackTrace();
         }
       }
-      System.out.print(routeView.getAmountOfOrderNumber());
 		}
 
     private ArrayList calculateRouteNearestNeigbor(int numberOfNodes) throws SQLException {
