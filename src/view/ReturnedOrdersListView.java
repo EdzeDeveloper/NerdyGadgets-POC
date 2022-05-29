@@ -98,7 +98,6 @@ public class ReturnedOrdersListView extends JPanel{
 
 	public void createResultView(Return retour) {
 		JLabel bestellingID = new JLabel("RetourID = " + Integer.toString(retour.getBestellingID()));
-		// System.out.print(retour);
 		resultViewPanel.add(bestellingID);
 		JPanel buttonLayout = new JPanel();
 		buttonLayout.setLayout(new BoxLayout(buttonLayout, BoxLayout.X_AXIS));

@@ -16,27 +16,6 @@ public class Graph {
 
     }
 
-//    public Graph(int graphID, int numberOfNodes) {
-//        this.graphID = graphID;
-//        this.nodeList = new int[numberOfNodes];
-//
-//        // calculate number of edges (summation/sigma)
-//        int numberOfEdges = 0;
-//        for (int i = 1; i <= numberOfNodes - 1; i++) {
-//            numberOfEdges = numberOfEdges + i;
-//        }
-//        this.edgeList = new Edge[numberOfEdges];
-//
-//        try {
-//            createGraph();
-//        } catch (SQLException e) {
-//            e.printStackTrace();
-//        }
-//
-//
-//        System.out.println("Created a graph with " + numberOfNodes + " nodes, and " + numberOfEdges + " edges.");
-//    }
-
     public Graph(int graphID) throws SQLException {
         this.graphID = graphID;
     }

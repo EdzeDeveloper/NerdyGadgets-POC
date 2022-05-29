@@ -118,8 +118,6 @@ public class ReturnOrderListController {
 	class returnListListener implements ListSelectionListener {
 
 		public void valueChanged (ListSelectionEvent e) {
-
-			
 			if (!e.getValueIsAdjusting()) {//This line prevents double events
 
 				Return R = (Return) returnList.getSelectedValue();
@@ -129,12 +127,7 @@ public class ReturnOrderListController {
 					try {
 						geselecteerdeRetour = returnRepo.findAndSetReturn(R.getRetourID());
 						view.emptyResultViewPanel();
-						// returnLabel.setText("Order ID: " + R.getBestellingID());
 						view.createResultView(geselecteerdeRetour);
-
-						//inistiate product information panel info.
-
-						// System.out.print(geselecteerdeBestelling);
 					} catch (SQLException e1) {
 						// TODO Auto-generated catch block
 						e1.printStackTrace();
