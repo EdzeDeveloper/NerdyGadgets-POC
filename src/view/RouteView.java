@@ -27,6 +27,7 @@ public class RouteView extends JPanel{
   private JTable tableFor2Opt;
 	private ArrayList<Order> routeListFor2Opt;
 	private Route route;
+	private JLabel aantalKMJLabelFor2Opt;
 
 	public RouteView() {
 		// new panels
@@ -51,6 +52,8 @@ public class RouteView extends JPanel{
 		routeJTable = new JTable(routeDefaultTableModel);
 		tableFor2Opt = new JTable(routeDefaultTableModelFor2Opt);
 		
+		//set labels
+		aantalKMJLabelFor2Opt = new JLabel();
 
 		// new splitpane
 		splitPane = new JSplitPane();
@@ -92,11 +95,19 @@ public class RouteView extends JPanel{
 	public void resetTable() {
 		routeJTable.removeAll();
 		tableFor2Opt.removeAll();
+		calculateRouteButtonFor2Opt.setVisible(false);
 		routeDefaultTableModel.setRowCount(0);
 		routeDefaultTableModelFor2Opt.setRowCount(0);
 		rightRouteView.removeAll();
 		rightRouteView.revalidate();
 		routeView.revalidate();
+	}
+	
+	public void reset2OptTable() {
+		tableFor2Opt.removeAll();
+		rightRouteView.remove(aantalKMJLabelFor2Opt);
+		routeDefaultTableModelFor2Opt.setRowCount(0);
+		rightRouteView.revalidate();
 	}
 
 	public void displayErrorMessage(String errorMessage){
@@ -137,7 +148,8 @@ public class RouteView extends JPanel{
 
 
 	public void create2optList(ArrayList calculateRouteNearestNeigbor, Route route) throws SQLException {
-		JLabel aantalKMJLabel = new JLabel("Completed 2-Opt, route is: " + Math.round(route.getAantalkm()/1000) + " km");
+		reset2OptTable();
+		aantalKMJLabelFor2Opt = new JLabel("Completed 2-Opt, route is: " + Math.round(route.getAantalkm()/1000) + " km");
 		routeListFor2Opt = calculateRouteNearestNeigbor;
     AdresRepository adresRepo = new AdresRepository();
 		for (int i = 0; i < routeListFor2Opt.size(); i++)   
@@ -147,11 +159,10 @@ public class RouteView extends JPanel{
 			routeDefaultTableModelFor2Opt.addRow(data);
 		}	
     // add list to Right Jpanel
-		rightRouteView.add(aantalKMJLabel);
+		rightRouteView.add(aantalKMJLabelFor2Opt);
 		rightRouteView.add(new JScrollPane(tableFor2Opt));
 
 		// accept.setVisible(true);
-		calculateRouteButtonFor2Opt.setVisible(false);
 		rightRouteView.revalidate();
 	}
 
