@@ -124,7 +124,7 @@ public class OrderRepository<T> implements CrudInterface<Order> {
     @Override
     public void update(Order bestelling) throws SQLException {
         String query
-        = "update bestelling set status=? "
+        = "SET foreign_key_checks = 0; update bestelling set status=? "
           + " where bestellingID = ?";
         PreparedStatement preparedStatement
         = con.prepareStatement(query);

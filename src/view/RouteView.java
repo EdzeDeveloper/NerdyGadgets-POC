@@ -9,6 +9,7 @@ import javax.swing.*;
 import javax.swing.table.DefaultTableModel;
 
 import model.Order;
+import model.Route;
 import repository.AdresRepository;
 
 public class RouteView extends JPanel{
@@ -21,6 +22,7 @@ public class RouteView extends JPanel{
   private JButton calculateRouteButton;
   private DefaultTableModel routeDefaultTableModel;
   private JTable routJTable;
+	private ArrayList<Order> routListFor2Opt;
 
 	public RouteView() {
 		// new panels
@@ -97,18 +99,19 @@ public class RouteView extends JPanel{
 	}
 
 
-  public void createRouteList(ArrayList<Order> routeList) throws SQLException {
+  public void createRouteList(ArrayList<Order> routeList, Route route) throws SQLException {
 		resetTable();
-		JLabel JLabelListTitle = new JLabel("Beste route op basis van Nearest Neighbor");
+		routListFor2Opt = routeList;
+		JLabel aantalKMJLabel = new JLabel("Completed Nearest Neighbor, route is: " + Math.round(route.getAantalkm()/1000) + " km");
     AdresRepository adresRepo = new AdresRepository();
 		for (int i = 0; i < routeList.size(); i++)   
 		{
 			// insert data into tableModel as rows
-			Object[] data = {routeList.get(i).getBestellingID(), adresRepo.find(routeList.get(i).getAdresID()).getStraatnaam() + "   " + adresRepo.find(routeList.get(i).getAdresID()).getPostcode() + "   " + adresRepo.find(routeList.get(i).getAdresID()).getWoonplaats()};
+			Object[] data = {routeList.get(i).getBestellingID(), adresRepo.find(routeList.get(i).getAdresID()).getStraatnaam() + " " + adresRepo.find(routeList.get(i).getAdresID()).getHuisnummer() + ", " + adresRepo.find(routeList.get(i).getAdresID()).getPostcode() + ", " + adresRepo.find(routeList.get(i).getAdresID()).getWoonplaats()};
 			routeDefaultTableModel.addRow(data);
 		}	
     // add list to Right Jpanel
-		rightRouteView.add(JLabelListTitle);
+		rightRouteView.add(aantalKMJLabel);
 		rightRouteView.add(new JScrollPane(routJTable));
 
 		// accept.setVisible(true);

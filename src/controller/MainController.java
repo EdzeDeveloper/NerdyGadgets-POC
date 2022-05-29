@@ -79,6 +79,7 @@ public class MainController {
           cardLayout.show(panelController, "returnProducts");
           // empty views when switching
           returnOrderListView.emptyResultViewPanel();
+          returnOrderListController.resetList();
           routeView.emptyResult();
         }
         if(e.getSource()==returnedOrderListProductsViewMenuItem) {
@@ -91,6 +92,7 @@ public class MainController {
           cardLayout.show(panelController, "viewRoute");
           // empty views when switching
           returnProductsView.emptyReturnPanel();
+          returnOrderListController.resetList();
           returnOrderListView.emptyResultViewPanel();
         }
       }

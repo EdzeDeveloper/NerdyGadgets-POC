@@ -105,7 +105,7 @@ public class ReturnedOrdersListView extends JPanel{
 		for (int i = 0; i < bestelling.getBesteldeProducten().size(); i++)   
 		{
 			// insert data into tableModel as rows
-			Object[] data = {bestelling.getBesteldeProducten().get(i).getProductID(), bestelling.getBesteldeProducten().get(i).getProductNaam(), bestelling.getBesteldeProducten().get(i).getPrijs()};
+			Object[] data = {bestelling.getBesteldeProducten().get(i).getProductID(), bestelling.getBesteldeProducten().get(i).getProductNaam(), " € " +bestelling.getBesteldeProducten().get(i).getPrijs()};
 			tableModel.addRow(data);
 		}	
 		resultViewPanel.add(new JScrollPane(table));

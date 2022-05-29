@@ -10,7 +10,7 @@ import model.DBConnection;
 public class DatabaseActions {
     private Connection con = DBConnection.getConnection();
 
-    public void emptyGraphFromDatabase(String query) throws SQLException {;
+    public void emptyGraphFromDatabase(String query) throws SQLException {
         PreparedStatement preparedStatement
         = con.prepareStatement(query);
         preparedStatement.executeUpdate();

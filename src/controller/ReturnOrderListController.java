@@ -109,22 +109,28 @@ public class ReturnOrderListController {
 			if (!e.getValueIsAdjusting()) {//This line prevents double events
 
 				Return R = (Return) returnList.getSelectedValue();
-				currentSelectedRetourId = R.getRetourID();
-				// probeer een Order met producten op te halen
-				try {
-					geselecteerdeBestelling = bestellingRepo.findAndSetOrder(R.getRetourID());
-					view.emptyResultViewPanel();
-					// returnLabel.setText("Order ID: " + R.getBestellingID());
-					view.createResultView(geselecteerdeBestelling);
+				if (returnList.getSelectedValue()!=null) {
+					currentSelectedRetourId = R.getRetourID();
+					// probeer een Order met producten op te halen
+					try {
+						geselecteerdeBestelling = bestellingRepo.findAndSetOrder(R.getRetourID());
+						view.emptyResultViewPanel();
+						// returnLabel.setText("Order ID: " + R.getBestellingID());
+						view.createResultView(geselecteerdeBestelling);
 
-					//inistiate product information panel info.
+						//inistiate product information panel info.
 
-					// System.out.print(geselecteerdeBestelling);
-				} catch (SQLException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
+						// System.out.print(geselecteerdeBestelling);
+					} catch (SQLException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+					}
 				}
 			}
 		}
+	}
+
+	public void resetList() {
+		returnList.clearSelection();
 	}
 }
