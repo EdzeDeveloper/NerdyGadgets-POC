@@ -152,7 +152,6 @@ public class ReturnRepository<T> implements CrudInterface<Return>{
         = "select * from retourproducten where retourID= ? AND aantal > 0";
         PreparedStatement preparedStatement
             = con.prepareStatement(query);
-        System.out.print(retour);
         ArrayList<Product> retourProducten = retour.getReturnedProductsArrayList();
   
         preparedStatement.setInt(1, retour.getRetourID());
