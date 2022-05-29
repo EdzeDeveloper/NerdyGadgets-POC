@@ -12,9 +12,19 @@ public class Return {
 
 	//returnedProducts<productID, quantity>
 	private Map<Integer, Integer> returnedProducts = new HashMap<>();
+	private ArrayList<Product> returnedProductsArrayList;
 
 	public Return() {
 		this.returnedProducts = new HashMap<>(); // initiate with empty list.
+		returnedProductsArrayList = new ArrayList(); // initiate with empty list.
+	}
+
+	public ArrayList<Product> getReturnedProductsArrayList() {
+		return returnedProductsArrayList;
+	}
+
+	public void setReturnedProductsArrayList(ArrayList<Product> returnedProductsArrayList) {
+		this.returnedProductsArrayList = returnedProductsArrayList;
 	}
 
 	public Return(int bestellingID, String reden, int retourID) {

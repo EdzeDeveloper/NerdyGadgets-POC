@@ -22,7 +22,7 @@ public class ReturnOrderListController {
 	private OrderRepository<Order> bestellingRepo;
 	private ProductRepository productRepo;
 	private ReturnRepository returnRepo;
-	private Order geselecteerdeBestelling;
+	private Return geselecteerdeRetour;
 	private int currentSelectedRetourId = 0;
 	
   
@@ -59,11 +59,18 @@ public class ReturnOrderListController {
 	class vieuwReturnedItemsEventListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
 			System.out.print(e.getActionCommand());
+			Order selectedOrder = null;
+			try {
+				selectedOrder = bestellingRepo.find(geselecteerdeRetour.getBestellingID());
+			} catch (SQLException e2) {
+				// TODO Auto-generated catch block
+				e2.printStackTrace();
+			}
 			if("Retour in goede orde ontvangen".equals(e.getActionCommand())) {
 				if (currentSelectedRetourId > 0) {
 					try {
-						geselecteerdeBestelling.setStatusToReturnRecieved();
-						bestellingRepo.update(geselecteerdeBestelling);
+						selectedOrder.setStatusToReturnRecieved();
+						bestellingRepo.update(selectedOrder);
 						returnRepo.delete(currentSelectedRetourId);
 						view.displayErrorMessage("Product status is gewijzigd naar : Retour ontvangen");
 					} catch (SQLException e1) {
@@ -75,8 +82,8 @@ public class ReturnOrderListController {
 			}
 			if("Retour afwijzen".equals(e.getActionCommand())) {
 				try {
-					geselecteerdeBestelling.setStatusToReturnDeclined();
-					bestellingRepo.update(geselecteerdeBestelling);
+					selectedOrder.setStatusToReturnDeclined();
+					bestellingRepo.update(selectedOrder);
 					view.displayErrorMessage("Product status is gewijzigd naar : afgewezen");
 					returnRepo.delete(currentSelectedRetourId);
 				} catch (SQLException e1) {
@@ -87,8 +94,8 @@ public class ReturnOrderListController {
 			}
 			if("Retour niet ontvangen".equals(e.getActionCommand())) {
 				try {
-					geselecteerdeBestelling.setStatusToReturnNOTRecieved();
-					bestellingRepo.update(geselecteerdeBestelling);
+					selectedOrder.setStatusToReturnNOTRecieved();
+					bestellingRepo.update(selectedOrder);
 					view.displayErrorMessage("Product status is gewijzigd naar : niet aangekomen");
 					returnRepo.delete(currentSelectedRetourId);
 				} catch (SQLException e1) {
@@ -113,10 +120,10 @@ public class ReturnOrderListController {
 					currentSelectedRetourId = R.getRetourID();
 					// probeer een Order met producten op te halen
 					try {
-						geselecteerdeBestelling = bestellingRepo.findAndSetOrder(R.getRetourID());
+						geselecteerdeRetour = returnRepo.findAndSetReturn(R.getRetourID());
 						view.emptyResultViewPanel();
 						// returnLabel.setText("Order ID: " + R.getBestellingID());
-						view.createResultView(geselecteerdeBestelling);
+						view.createResultView(geselecteerdeRetour);
 
 						//inistiate product information panel info.
 

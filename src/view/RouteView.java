@@ -20,9 +20,13 @@ public class RouteView extends JPanel{
   private JLabel aantalBestellingenLabel;
   private JTextField aantalBestellingenTextField;
   private JButton calculateRouteButton;
+  private JButton calculateRouteButtonFor2Opt;
   private DefaultTableModel routeDefaultTableModel;
-  private JTable routJTable;
-	private ArrayList<Order> routListFor2Opt;
+  private DefaultTableModel routeDefaultTableModelFor2Opt;
+  private JTable routeJTable;
+  private JTable tableFor2Opt;
+	private ArrayList<Order> routeListFor2Opt;
+	private Route route;
 
 	public RouteView() {
 		// new panels
@@ -43,17 +47,22 @@ public class RouteView extends JPanel{
 		//create table beforehand
 		String colums[]={"BestellingID","Adres"};    
 		routeDefaultTableModel = new DefaultTableModel(colums, 0);
-		routJTable = new JTable(routeDefaultTableModel);
+		routeDefaultTableModelFor2Opt = new DefaultTableModel(colums, 0);
+		routeJTable = new JTable(routeDefaultTableModel);
+		tableFor2Opt = new JTable(routeDefaultTableModelFor2Opt);
 		
 
 		// new splitpane
 		splitPane = new JSplitPane();
 
     //add create items for left view
+
     calculateRouteButton = new JButton("Bereken route");
+    calculateRouteButtonFor2Opt = new JButton("Bereken 2-opt");
     leftRouteView.add(aantalBestellingenLabel);
     leftRouteView.add(aantalBestellingenTextField);
     leftRouteView.add(calculateRouteButton);
+    leftRouteView.add(calculateRouteButtonFor2Opt);
 
     splitPane.setLeftComponent(leftRouteView);
 		splitPane.setRightComponent(rightRouteView);
@@ -61,6 +70,7 @@ public class RouteView extends JPanel{
 
 	
 		//add items to views6
+		  calculateRouteButtonFor2Opt.setVisible(false);
 		  calculateRouteButton.setVisible(true);
       routeView.add(splitPane);
       routeView.revalidate();
@@ -70,6 +80,9 @@ public class RouteView extends JPanel{
 	public void setCalculateRouteListener(ActionListener actionListener) {
 		calculateRouteButton.addActionListener(actionListener);
 	}
+	public void setCalculateFor2OptRouteListener(ActionListener actionListener) {
+		calculateRouteButtonFor2Opt.addActionListener(actionListener);
+	}
 
 	public void emptyResult() {
 		resetTable();
@@ -77,8 +90,10 @@ public class RouteView extends JPanel{
 		routeView.revalidate();
 	}
 	public void resetTable() {
-		routJTable.removeAll();
+		routeJTable.removeAll();
+		tableFor2Opt.removeAll();
 		routeDefaultTableModel.setRowCount(0);
+		routeDefaultTableModelFor2Opt.setRowCount(0);
 		rightRouteView.removeAll();
 		rightRouteView.revalidate();
 		routeView.revalidate();
@@ -94,14 +109,15 @@ public class RouteView extends JPanel{
     return routeView;
   }
 
-  public int getAmountOfOrderNumber(){
-		return Integer.parseInt(aantalBestellingenTextField.getText());
+  public JTextField getAmountOfOrderNumber(){
+		return aantalBestellingenTextField;
 	}
 
 
   public void createRouteList(ArrayList<Order> routeList, Route route) throws SQLException {
 		resetTable();
-		routListFor2Opt = routeList;
+		routeListFor2Opt = routeList;
+		this.route = route;
 		JLabel aantalKMJLabel = new JLabel("Completed Nearest Neighbor, route is: " + Math.round(route.getAantalkm()/1000) + " km");
     AdresRepository adresRepo = new AdresRepository();
 		for (int i = 0; i < routeList.size(); i++)   
@@ -112,12 +128,40 @@ public class RouteView extends JPanel{
 		}	
     // add list to Right Jpanel
 		rightRouteView.add(aantalKMJLabel);
-		rightRouteView.add(new JScrollPane(routJTable));
+		rightRouteView.add(new JScrollPane(routeJTable));
 
 		// accept.setVisible(true);
-	
+		calculateRouteButtonFor2Opt.setVisible(true);
 		rightRouteView.revalidate();
   }
+
+
+	public void create2optList(ArrayList calculateRouteNearestNeigbor, Route route) throws SQLException {
+		JLabel aantalKMJLabel = new JLabel("Completed 2-Opt, route is: " + Math.round(route.getAantalkm()/1000) + " km");
+    AdresRepository adresRepo = new AdresRepository();
+		for (int i = 0; i < routeListFor2Opt.size(); i++)   
+		{
+			// insert data into tableModel as rows
+			Object[] data = {routeListFor2Opt.get(i).getBestellingID(), adresRepo.find(routeListFor2Opt.get(i).getAdresID()).getStraatnaam() + " " + adresRepo.find(routeListFor2Opt.get(i).getAdresID()).getHuisnummer() + ", " + adresRepo.find(routeListFor2Opt.get(i).getAdresID()).getPostcode() + ", " + adresRepo.find(routeListFor2Opt.get(i).getAdresID()).getWoonplaats()};
+			routeDefaultTableModelFor2Opt.addRow(data);
+		}	
+    // add list to Right Jpanel
+		rightRouteView.add(aantalKMJLabel);
+		rightRouteView.add(new JScrollPane(tableFor2Opt));
+
+		// accept.setVisible(true);
+		calculateRouteButtonFor2Opt.setVisible(false);
+		rightRouteView.revalidate();
+	}
+
+
+  public ArrayList getCurrentRoute() {
+    return routeListFor2Opt;
+  }
+
+	public Route getRoute() {
+		return route;
+	}
 }
 
 

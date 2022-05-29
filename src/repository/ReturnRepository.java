@@ -1,5 +1,6 @@
 package repository;
 import model.Order;
+import model.Product;
 import model.Return;
 import model.DBConnection;
 import java.sql.Connection;
@@ -118,4 +119,49 @@ public class ReturnRepository<T> implements CrudInterface<Return>{
         preparedStatement.executeUpdate();
         
     }
+
+    public Return findAndSetReturn(int id) throws SQLException {
+        String query
+        = "select * from retour where retourID= ?";
+        PreparedStatement preparedStatement
+            = con.prepareStatement(query);
+        Return returnOrderInstance = new Return();
+        preparedStatement.setInt(1, id);
+        ResultSet resultSet = preparedStatement.executeQuery();
+        boolean check = false;
+  
+        while (resultSet.next()) {
+            check = true;
+            returnOrderInstance.setBestellingID(resultSet.getInt("bestellingID"));
+            returnOrderInstance.setReden(resultSet.getString("reden"));
+            returnOrderInstance.setRetourID(resultSet.getInt("retourID"));
+  
+            //get producten van de bestelling
+            setAllReturnedOrderedProducts(returnOrderInstance);
+        }
+  
+        if (check == true) {
+            return returnOrderInstance;
+        }
+        return returnOrderInstance;
+      }
+
+      public Return setAllReturnedOrderedProducts(Return retour) throws SQLException {
+        ProductRepository ProductRepository = new ProductRepository();
+        String query
+        = "select * from retourproducten where retourID= ? AND aantal > 0";
+        PreparedStatement preparedStatement
+            = con.prepareStatement(query);
+        System.out.print(retour);
+        ArrayList<Product> retourProducten = retour.getReturnedProductsArrayList();
+  
+        preparedStatement.setInt(1, retour.getRetourID());
+  
+        ResultSet resultSet = preparedStatement.executeQuery();
+        // add product aan lijst van de bestelling
+        while (resultSet.next()) {
+          retourProducten.add(ProductRepository.find(resultSet.getInt("productID")));
+        }
+        return retour;
+      }
   }

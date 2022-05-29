@@ -4,6 +4,9 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import javax.swing.JTextField;
+
 import model.Graph;
 import model.Order;
 import model.Route;
@@ -20,14 +23,22 @@ public class RouteViewController {
 		this.routeView = routeView;
 
 		this.routeView.setCalculateRouteListener(new RouteViewListener());
+		this.routeView.setCalculateFor2OptRouteListener(new RouteViewListener());
 	}
 	
 	class RouteViewListener implements ActionListener {
 		public void actionPerformed(ActionEvent e) {
       if("Bereken route".equals(e.getActionCommand())) {
         try {
-          routeView.displayErrorMessage("De route wordt voor u berekend.");
-          routeView.createRouteList(calculateRouteNearestNeigbor(routeView.getAmountOfOrderNumber()), route);
+          JTextField TextFieldAmountOfOrderNumbers = routeView.getAmountOfOrderNumber();
+          if(TextFieldAmountOfOrderNumbers.getText().isEmpty()){
+            routeView.displayErrorMessage("Vul aantal besteellingen in.");
+          } else if(Integer.parseInt(TextFieldAmountOfOrderNumbers.getText()) == 0) {
+            routeView.displayErrorMessage("Aantal bestellingen voor de route kan niet 0 zijn.");
+          } else {
+            routeView.displayErrorMessage("De route wordt voor u berekend.");
+            routeView.createRouteList(calculateRouteNearestNeigbor(Integer.parseInt(TextFieldAmountOfOrderNumbers.getText())), route);
+          }
         } catch (SQLException e1) {
           // TODO Auto-generated catch block
           routeView.displayErrorMessage("Er is wat mis gegaan met het berekenen van de route");
@@ -37,7 +48,7 @@ public class RouteViewController {
       if("Bereken 2-opt".equals(e.getActionCommand())) {
         try {
           routeView.displayErrorMessage("De 2-opt berekening probeert uw route te verbeteren.");
-          routeView.createRouteList(calculateRouteNearestNeigbor(routeView.getAmountOfOrderNumber()), route);
+          routeView.create2optList(calculateRoute2opt(routeView.getCurrentRoute()), routeView.getRoute());
         } catch (SQLException e1) {
           // TODO Auto-generated catch block
           routeView.displayErrorMessage("Er is wat mis gegaan met het berekenen van de 2-opt route");
@@ -78,32 +89,34 @@ public class RouteViewController {
       return deliveryOrder;
     }
 
-    // public void calculateRoute2opt(ArrayList<Order> neirestNeighborOrders) {
-    //   System.out.println("Applying 2-opt...");
-    //   for (int i = 1; i < 4; i++) {
-    //     RouteRepository routeRepository = new RouteRepository();
+    public ArrayList calculateRoute2opt(ArrayList<Order> neirestNeighborOrders) throws SQLException {
+      System.out.println("Applying 2-opt...");
+        for (int i = 1; i < 4; i++) {
+          RouteRepository routeRepository = new RouteRepository();
 
-    //     //set time variables
-    //     long startTime = System.nanoTime();
-    //     long endTime = System.nanoTime();
-    //     long duration = (endTime - startTime)/1000000000;
+          //set time variables
+          long startTime = System.nanoTime();
+          long endTime = System.nanoTime();
+          long duration = (endTime - startTime)/1000000000;
 
 
-    //     startTime = System.nanoTime();
-    //     double currentAantalkm = route.getAantalkm();
-    //     deliveryOrder = route.twoOpt();
-    //     routeRepository.update(route);
-    //     routeRepository.updateDeliveryOrder(deliveryOrder, route.getRouteId());
-    //     double newAantalkm = route.getAantalkm();
-    //     endTime = System.nanoTime();
-    //     duration = (endTime - startTime)/1000000000;
-    //     if (newAantalkm == currentAantalkm) {
-    //       System.out.println("2-opt found the best route in " + (i - 1) + " itterations " + Math.round(newAantalkm/1000) + " km");
-    //       break;
-    //     }
-    //     System.out.println("Completed 2-opt iteration " + i + " in " + duration + " seconds. " + Math.round(route.getAantalkm()/1000) + " km");
-    //   }
-    // }
+          startTime = System.nanoTime();
+          double currentAantalkm = route.getAantalkm();
+          neirestNeighborOrders = route.twoOpt();
+          routeRepository.update(route);
+          routeRepository.updateDeliveryOrder(neirestNeighborOrders, route.getRouteId());
+          double newAantalkm = route.getAantalkm();
+          endTime = System.nanoTime();
+          duration = (endTime - startTime)/1000000000;
+          if (newAantalkm == currentAantalkm) {
+            System.out.println("2-opt found the best route in " + (i - 1) + " itterations " + Math.round(newAantalkm/1000) + " km");
+            break;
+          }
+          System.out.println("Completed 2-opt iteration " + i + " in " + duration + " seconds. " + Math.round(route.getAantalkm()/1000) + " km");
+        }
+      return neirestNeighborOrders;
+
+    }
 	}
 }
 

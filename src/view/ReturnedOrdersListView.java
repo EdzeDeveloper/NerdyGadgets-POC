@@ -96,16 +96,17 @@ public class ReturnedOrdersListView extends JPanel{
 		resultViewPanel.add(retourNotRecieved);
 	}
 
-	public void createResultView(Order bestelling) {
-		JLabel bestellingID = new JLabel("RetourID = " + Integer.toString(bestelling.getBestellingID()));
+	public void createResultView(Return retour) {
+		JLabel bestellingID = new JLabel("RetourID = " + Integer.toString(retour.getBestellingID()));
+		// System.out.print(retour);
 		resultViewPanel.add(bestellingID);
 		JPanel buttonLayout = new JPanel();
 		buttonLayout.setLayout(new BoxLayout(buttonLayout, BoxLayout.X_AXIS));
 
-		for (int i = 0; i < bestelling.getBesteldeProducten().size(); i++)   
+		for (int i = 0; i < retour.getReturnedProductsArrayList().size(); i++)   
 		{
 			// insert data into tableModel as rows
-			Object[] data = {bestelling.getBesteldeProducten().get(i).getProductID(), bestelling.getBesteldeProducten().get(i).getProductNaam(), " € " +bestelling.getBesteldeProducten().get(i).getPrijs()};
+			Object[] data = {retour.getReturnedProductsArrayList().get(i).getProductID(), retour.getReturnedProductsArrayList().get(i).getProductNaam(), " € " +retour.getReturnedProductsArrayList().get(i).getPrijs()};
 			tableModel.addRow(data);
 		}	
 		resultViewPanel.add(new JScrollPane(table));

@@ -43,7 +43,7 @@ public class OrderRepository<T> implements CrudInterface<Order> {
 
     public Order findAndSetOrder(int id) throws SQLException {
       String query
-      = "select * from bestelling where bestellingID= ?";
+      = "select * from retour where bestellingID= ?";
       PreparedStatement preparedStatement
           = con.prepareStatement(query);
       Order returnOrderInstance = new Order();
