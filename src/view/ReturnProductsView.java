@@ -62,6 +62,10 @@ public class ReturnProductsView extends JPanel{
 		return productsToReturn;
 	}
 
+	public void resetProductsToReturn() {
+		productsToReturn.clear();
+	}
+
 	public void setOrder(Order order) {
 		
 		this.order = order;

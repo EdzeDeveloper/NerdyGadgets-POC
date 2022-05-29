@@ -94,6 +94,7 @@ public class ReturnProductsController {
 		returnRepository.create(returnInstance);
 
 		returnProductsView.displayErrorMessage("Uw retour is aangemeld, we zullen zo spoedig mogelijk contact met u opnemen.");
+		returnProductsView.resetProductsToReturn();
 		returnProductsView.emptyReturnPanel();
 	}
 }
